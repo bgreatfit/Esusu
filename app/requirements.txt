@@ -1,0 +1,11 @@
+django==2.2.3
+mysqlclient
+django-debug-toolbar
+faker
+gunicorn
+pytest
+pytest-django
+pytest-cov
+setuptools
+ipdb
+djangorestframework
