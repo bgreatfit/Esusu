@@ -26,8 +26,8 @@ services:
         - PROJECT_NAME=cowrywise
         - DB_HOST=mysql
         - DB_NAME=cowrywise_db
-        - DB_USER=dbuser
-        - DB_PWD=dbpw
+        - DB_USER=root
+        - DB_PWD=root
 
 #      env_file:
 #        - .env
@@ -47,7 +47,7 @@ services:
       volumes:
         - mysql-data:/var/lib/mysql
       ports:
-        - "8307:3307"
+        - "8307:3306"
 
 
     phpmyadmin:
@@ -57,7 +57,7 @@ services:
           - PMA_ARBITRARY=1
       restart: always
       ports:
-             - 8083:8080
+             - 8083:80
       volumes:
              - /session
 

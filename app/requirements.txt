@@ -9,3 +9,6 @@ pytest-cov
 setuptools
 ipdb
 djangorestframework
+django-rest-auth
+django-rest-framework-jwt
+Pillow
