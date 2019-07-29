@@ -6,10 +6,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('title', 'dob', 'address', 'country', 'city', 'zip', 'photo')
+        fields = ('title', 'dob', 'address', 'country', 'city', 'photo')
 
 
 class UserSerializer(serializers.ModelSerializer):
+    # profile = serializers.HyperlinkedRelatedField(many=True, required=True, view_name='esusu:user-detail',
+    #                                               queryset=UserProfile.objects.all())
+    profile = UserProfileSerializer(required=True)
+
     class Meta:
         model = User
         fields = ('url', 'email', 'first_name', 'last_name', 'password', 'profile')
@@ -36,7 +40,6 @@ class UserSerializer(serializers.ModelSerializer):
         profile.address = profile_data.get('address', profile.address)
         profile.country = profile_data.get('country', profile.country)
         profile.city = profile_data.get('city', profile.city)
-        profile.zip = profile_data.get('zip', profile.zip)
         profile.photo = profile_data.get('photo', profile.photo)
         profile.save()
 

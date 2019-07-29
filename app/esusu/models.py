@@ -20,9 +20,9 @@ class User(AbstractUser):
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                 related_name='profile')
-    title = models.CharField(max_length=5)
-    dob = models.DateField()
-    address = models.CharField(max_length=255)
-    country = models.CharField(max_length=50)
-    city = models.CharField(max_length=50)
-    photo = models.ImageField(upload_to='uploads', blank=True)
+    title = models.CharField(max_length=5, blank=True, null=True)
+    dob = models.DateField(auto_created=True, blank=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    country = models.CharField(max_length=50, blank=True, null=True)
+    city = models.CharField(max_length=50, blank=True, null=True)
+    photo = models.ImageField(upload_to='uploads', blank=True, null=True)

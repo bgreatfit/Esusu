@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'esusu.apps.EsusuConfig',
+    'rest_framework.authtoken',  # Add this line
+    'rest_auth',                # Add this line
 ]
 AUTH_USER_MODEL = 'esusu.User'
 MIDDLEWARE = [
