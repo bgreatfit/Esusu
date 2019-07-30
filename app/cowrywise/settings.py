@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'esusu.apps.EsusuConfig',
-    'rest_framework.authtoken',  # Add this line
-    'rest_auth',                # Add this line
+    'rest_framework_simplejwt',
+
 ]
 AUTH_USER_MODEL = 'esusu.User'
 MIDDLEWARE = [
@@ -131,6 +131,8 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
