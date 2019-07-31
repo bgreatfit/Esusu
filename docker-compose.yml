@@ -22,15 +22,8 @@ services:
       build: app
       container_name: ${PROJECT_NAME}-django
       command: .entrypoint.sh
-      environment:
-        - PROJECT_NAME=cowrywise
-        - DB_HOST=mysql
-        - DB_NAME=cowrywise_db
-        - DB_USER=root
-        - DB_PWD=root
-
-#      env_file:
-#        - .env
+      env_file:
+       - .env
       volumes:
         - ./app:/app
         - static_volume:/app/static

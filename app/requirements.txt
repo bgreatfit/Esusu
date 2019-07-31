@@ -10,5 +10,5 @@ setuptools
 ipdb
 djangorestframework
 django-rest-auth
-django-rest-framework-jwt
 Pillow
+djangorestframework_simplejwt
