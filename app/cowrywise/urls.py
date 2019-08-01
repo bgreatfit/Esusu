@@ -31,8 +31,8 @@ urlpatterns += [
     path('admin/', admin.site.urls),
 ]
 urlpatterns += [
-    re_path('api/v1/', include(router.urls)),
-]
+        re_path('api/v1/', include('esusu.urls')),
+    ]
 urlpatterns += [
     re_path('api/v1/', include(router.urls)),
 ]

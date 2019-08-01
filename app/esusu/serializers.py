@@ -1,22 +1,29 @@
 from rest_framework import serializers
-from .models import User, UserProfile
+from .models import User, UserProfile, Group, GroupInstance
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserProfile
         fields = ('title', 'dob', 'address', 'country', 'city', 'photo')
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('user', 'description', 'max_number', 'slot', 'is_searchable', 'created_at', 'updated_at')
 
 
 class UserSerializer(serializers.ModelSerializer):
     # profile = serializers.HyperlinkedRelatedField(many=True, required=True, view_name='esusu:user-detail',
     #                                               queryset=UserProfile.objects.all())
     profile = UserProfileSerializer(required=True)
+    group = serializers.HyperlinkedRelatedField(many=True, read_only=True,
+                                                view_name='esusu:group-detail')
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name', 'password', 'profile')
+        fields = ('email', 'first_name', 'last_name', 'password', 'profile', ' group')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -45,3 +52,10 @@ class UserSerializer(serializers.ModelSerializer):
 
         return instance
 
+
+class GroupInstanceSerializer(serializers.ModelSerializer):
+
+    model = GroupInstance
+
+    class Metal:
+        fields = ('id', 'group', 'member', 'rank', 'contribution', 'created_at', 'updated_at')

@@ -1,14 +1,14 @@
-from django.shortcuts import render
-from rest_framework import viewsets, permissions
+from django.shortcuts import render, get_object_or_404
+from rest_framework import viewsets, permissions, generics
 
 # Create your views here.
 from rest_framework.permissions import AllowAny
 
-from .models import User
-from .serializers import UserSerializer, UserProfileSerializer
+from .models import User, Group
+from .serializers import UserSerializer, UserProfileSerializer, GroupSerializer
 
 # Also add these imports
-from .permissions import IsLoggedInUserOrAdmin, IsAdminUser
+from .permissions import IsLoggedInUserOrAdmin, IsAdminUser, IsOwnerOrReadOnly
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -27,7 +27,34 @@ class UserViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
+
+
+class ListCreateGroup(generics.ListCreateAPIView):
+    serializer_class = GroupSerializer
+
+    def get_queryset(self):
+        return Group.objects.filter(user_id=self.kwargs.get('user_pk'))
+
+    def perform_create(self, serializer):
+        user = get_object_or_404(
+            User, pk=self.kwargs.get('user_pk')
+        )
+        serializer.save(course=user)
+
+
+class RetrieveUpdateDestroyGroup(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+    def get_queryset(self):
+        return get_object_or_404(
+            self.get_queryset(),
+            course_id=self.kwargs.get('user_pk'),
+            pk=self.kwargs.get('pk')
+        )
+
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,)
