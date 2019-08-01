@@ -2,8 +2,8 @@
 -- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Host: 172.18.0.3
--- Generation Time: Jul 31, 2019 at 07:36 AM
+-- Host: 172.19.0.2
+-- Generation Time: Aug 01, 2019 at 05:41 PM
 -- Server version: 5.6.43
 -- PHP Version: 7.2.14
 
@@ -122,7 +122,11 @@ CREATE TABLE `django_admin_log` (
 --
 
 INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`, `action_flag`, `change_message`, `content_type_id`, `user_id`) VALUES
-(1, '2019-07-27 10:37:07.827752', '1', 'mioshine2011@gmail.com', 2, '[{\"changed\": {\"fields\": [\"first_name\", \"last_name\", \"email\"]}}, {\"added\": {\"name\": \"user profile\", \"object\": \"UserProfile object (1)\"}}]', 6, 1);
+(1, '2019-07-27 10:37:07.827752', '1', 'mioshine2011@gmail.com', 2, '[{\"changed\": {\"fields\": [\"first_name\", \"last_name\", \"email\"]}}, {\"added\": {\"name\": \"user profile\", \"object\": \"UserProfile object (1)\"}}]', 6, 1),
+(2, '2019-08-01 12:18:15.054143', '1', 'GREATMAN', 1, '[{\"added\": {}}]', 8, 1),
+(3, '2019-08-01 16:52:07.329518', '1', 'HERE', 2, '[{\"changed\": {\"fields\": [\"description\", \"name\", \"amount\"]}}]', 8, 1),
+(4, '2019-08-01 16:52:28.642101', '1', 'HERE', 2, '[]', 8, 1),
+(5, '2019-08-01 17:39:08.768627', '2', 'GReatmen', 1, '[{\"added\": {}}]', 8, 1);
 
 -- --------------------------------------------------------
 
@@ -187,7 +191,8 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (16, 'admin', '0002_logentry_remove_auto_add', '2019-07-27 10:32:57.916156'),
 (17, 'admin', '0003_logentry_add_action_flag_choices', '2019-07-27 10:32:58.013233'),
 (18, 'sessions', '0001_initial', '2019-07-27 10:32:59.130851'),
-(19, 'esusu', '0002_auto_20190731_0733', '2019-07-31 07:34:45.884726');
+(19, 'esusu', '0002_auto_20190731_0733', '2019-07-31 07:34:45.884726'),
+(20, 'esusu', '0003_auto_20190801_0909', '2019-08-01 16:49:16.691097');
 
 -- --------------------------------------------------------
 
@@ -206,6 +211,7 @@ CREATE TABLE `django_session` (
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
+('3a4khd93m4wis8aiygmjfbajhr8b03du', 'YmIwMmU3OTNiNGRkZTFmYzI2MmRlZjQxMmRmZWViMzQwNzc5YWE3NDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIxNDE5MWM1Y2ZlYzlhNjhhNzZmYmRlZjUwNWI3ZWIzZDYyMzAzMDQ2In0=', '2019-08-15 10:49:38.106394'),
 ('schhs646wd2pf5bqnpzo903z54jaox83', 'YmIwMmU3OTNiNGRkZTFmYzI2MmRlZjQxMmRmZWViMzQwNzc5YWE3NDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIxNDE5MWM1Y2ZlYzlhNjhhNzZmYmRlZjUwNWI3ZWIzZDYyMzAzMDQ2In0=', '2019-08-10 10:35:32.770035');
 
 -- --------------------------------------------------------
@@ -217,12 +223,23 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 CREATE TABLE `esusu_group` (
   `id` int(11) NOT NULL,
   `description` longtext NOT NULL,
-  `is_admin` tinyint(1) NOT NULL,
   `max_number` int(11) NOT NULL,
-  `created` datetime(6) NOT NULL,
-  `updated` datetime(6) NOT NULL,
-  `user_id` int(11) DEFAULT NULL
+  `slot` varchar(255) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `is_searchable` varchar(1) NOT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `esusu_group`
+--
+
+INSERT INTO `esusu_group` (`id`, `description`, `max_number`, `slot`, `created_at`, `updated_at`, `user_id`, `is_searchable`, `amount`, `name`) VALUES
+(1, 'HERE', 10, '[7, 10, 3, 2, 9, 1, 6, 4, 5, 8]', '2019-08-01 12:18:15.049424', '2019-08-01 16:52:28.638759', 1, '1', '50000.00', 'GREATMEN'),
+(2, 'GReatmen', 10, '[4, 10, 2, 3, 6, 8, 5, 7, 1, 9]', '2019-08-01 17:39:08.763549', '2019-08-01 17:39:08.763630', 6, '1', '45000.00', 'SYSSOFT');
 
 -- --------------------------------------------------------
 
@@ -232,12 +249,12 @@ CREATE TABLE `esusu_group` (
 
 CREATE TABLE `esusu_groupinstance` (
   `id` char(32) NOT NULL,
-  `due_back` date DEFAULT NULL,
   `contribution` int(11) NOT NULL,
-  `created` datetime(6) NOT NULL,
-  `updated` datetime(6) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
   `group_id` int(11) DEFAULT NULL,
-  `member_id` int(11) DEFAULT NULL
+  `member_id` int(11) DEFAULT NULL,
+  `rank` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -265,7 +282,7 @@ CREATE TABLE `esusu_user` (
 --
 
 INSERT INTO `esusu_user` (`id`, `password`, `last_login`, `is_superuser`, `first_name`, `last_name`, `is_staff`, `is_active`, `date_joined`, `username`, `email`) VALUES
-(1, 'pbkdf2_sha256$150000$DnkxTLvaDsns$blqHMEe6OdVtvfH92bx5WNl8blWhgKdQ/YfJbsaFuEk=', '2019-07-27 10:35:32.000000', 1, 'Micheal', 'Oj', 1, 1, '2019-07-27 10:34:12.000000', 'admin', 'mioshine2011@gmail.com'),
+(1, 'pbkdf2_sha256$150000$DnkxTLvaDsns$blqHMEe6OdVtvfH92bx5WNl8blWhgKdQ/YfJbsaFuEk=', '2019-08-01 10:49:37.911153', 1, 'Micheal', 'Oj', 1, 1, '2019-07-27 10:34:12.000000', 'admin', 'mioshine2011@gmail.com'),
 (2, 'pbkdf2_sha256$150000$PQ5lw3GbKes2$Q54agaVhkkOngpcCPw7d9dZkDbBwSm7WcgYygbYurD0=', NULL, 0, 'Micheal', '', 0, 1, '2019-07-29 05:03:40.191194', NULL, 'mioshine@gmail.com'),
 (3, 'pbkdf2_sha256$150000$ZqlXa8QtH61f$TfBCRH1W0pipAUvisxNYD4Fc7EStNahB2qt1iTd4eLM=', NULL, 0, 'Micheal', '', 0, 1, '2019-07-29 05:05:13.314683', NULL, 'amin@gmail.com'),
 (4, 'pbkdf2_sha256$150000$7IJSx7XNjM3t$Ysu2jktXp1xsnB0qDHCiLmwdbF4kzhRZmQOP05Fd4uU=', NULL, 0, 'mike', '', 0, 1, '2019-07-29 05:17:11.541448', NULL, 'moj@g.vom'),
@@ -447,7 +464,7 @@ ALTER TABLE `auth_permission`
 -- AUTO_INCREMENT for table `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `django_content_type`
@@ -459,13 +476,13 @@ ALTER TABLE `django_content_type`
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `esusu_group`
 --
 ALTER TABLE `esusu_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `esusu_user`

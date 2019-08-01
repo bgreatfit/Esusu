@@ -2,7 +2,7 @@ from django.urls import path, re_path
 from . import views
 
 app_name = 'esusu'
-urlpatterns = [
+urlpatterns = [ path('groups', views.ListCreateGroup.as_view(), name='group-list'),
     re_path('users/(?P<user_pk>\d+)/groups/$', views.ListCreateGroup.as_view(), name='group-list'),
     re_path('users/(?P<user_pk>\d+)/groups/(?P<pk>\d+)/$',
             views.RetrieveUpdateDestroyGroup.as_view(), name='group-detail'),

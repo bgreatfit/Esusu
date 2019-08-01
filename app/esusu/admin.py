@@ -12,6 +12,11 @@ class UserProfileInline(admin.StackedInline):
     can_delete = False
 
 
+class GroupInline(admin.StackedInline):
+    model = Group
+
+
+
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
@@ -21,7 +26,8 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
     ordering = ('email',)
-    inlines = (UserProfileInline,)
+    #inlines = (UserProfileInline,)
+    inlines = (GroupInline,)
 
 
 class GroupInstanceInline(admin.TabularInline):

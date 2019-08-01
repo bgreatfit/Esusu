@@ -36,23 +36,46 @@ class Group(models.Model):
     """ Model representing a book """
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     description = models.TextField(max_length=1000, help_text='Enter a brief description of this group')
+    name = models.CharField(max_length=255, null=True)
     max_number = models.IntegerField()
-
-    def create_random_slot(self):
-        total_slot = self.max_number
-        my_randoms = random.sample(range(1, total_slot), total_slot)
-        return tuple(my_randoms)
-
-    slot = models.CharField(max_length=255, default=create_random_slot)
-    is_searchable = models.CharField(max_length=1, default=1)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    slot = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    IS_SEARCHABLE = (
+        ('1', 'YES'),
+        ('0', 'NO')
+    )
+    
+    is_searchable = models.CharField(max_length=1, default=1, choices=IS_SEARCHABLE)
 
     def __str__(self):
         return self.description
 
     def get_absolute_url(self):
         return reverse('esusu:group-detail', args=[str(self.id)])
+    
+    
+    def create_random_slot(self):
+        total_slot = self.max_number
+        my_randoms = random.sample(range(1, total_slot + 1), total_slot)
+        print(my_randoms)
+        return my_randoms 
+
+    def save(self, *args, **kwargs):
+        random_slot = self.create_random_slot()
+        self.slot = random_slot
+        super(Group, self).save(*args, **kwargs)
+
+
+    # def save_group_admin(self):
+    #     self.group.member
+    #     self.rank
+    #     self
+    #     self.group.save()
+
+
     #
     # def display_genre(self):
     #     """Create a string for the Genre. This is required to display genre in Admin."""
@@ -69,7 +92,8 @@ class GroupInstance(models.Model):
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True)
     member = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     rank = models.IntegerField(null=True)
-    contribution = models.IntegerField()
+    contribution = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 

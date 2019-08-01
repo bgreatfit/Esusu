@@ -9,21 +9,23 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    groupinstances = serializers.HyperlinkedRelatedField(many=True, read_only=True,
+                                                view_name='esusu:group-detail')
     class Meta:
         model = Group
-        fields = ('user', 'description', 'max_number', 'slot', 'is_searchable', 'created_at', 'updated_at')
+        fields = ('user', 'description', 'max_number', 'slot', 'is_searchable', 'created_at', 'updated_at', 'groupinstances')
 
 
 class UserSerializer(serializers.ModelSerializer):
     # profile = serializers.HyperlinkedRelatedField(many=True, required=True, view_name='esusu:user-detail',
     #                                               queryset=UserProfile.objects.all())
     profile = UserProfileSerializer(required=True)
-    group = serializers.HyperlinkedRelatedField(many=True, read_only=True,
+    groups = serializers.HyperlinkedRelatedField(many=True, read_only=True,
                                                 view_name='esusu:group-detail')
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name', 'password', 'profile', ' group')
+        fields = ('email', 'first_name', 'last_name', 'password', 'profile', 'groups')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
