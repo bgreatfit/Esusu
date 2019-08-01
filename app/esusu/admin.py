@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, UserProfile
+from .models import User, UserProfile, GroupInstance, Group
+
+
 # Register your models here.
 
 
@@ -20,3 +22,25 @@ class UserAdmin(BaseUserAdmin):
     )
     ordering = ('email',)
     inlines = (UserProfileInline,)
+
+
+class GroupInstanceInline(admin.TabularInline):
+    model = GroupInstance
+
+
+@admin.register(Group)
+class GroupAdmin(admin.ModelAdmin):
+    inlines = [GroupInstanceInline]
+
+
+@admin.register(GroupInstance)
+class GroupInstanceAdmin(admin.ModelAdmin):
+    list_display = ['id', 'group', 'member', 'rank', 'contribution', 'created_at', 'updated_at']
+    list_select_related = ('group',)
+    list_filter = ('created_at', 'rank')
+    fieldsets = (
+        (None, {'fields': ('group', 'id')}),
+        ('Availability', {
+            'fields': ('status', 'member', 'contribution', 'created_at', 'updated_at')
+        }),
+    )
