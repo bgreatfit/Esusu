@@ -2,8 +2,8 @@
 -- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Host: 172.19.0.2
--- Generation Time: Aug 01, 2019 at 05:41 PM
+-- Host: 172.18.0.2
+-- Generation Time: Aug 02, 2019 at 07:17 AM
 -- Server version: 5.6.43
 -- PHP Version: 7.2.14
 
@@ -95,10 +95,10 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (30, 'Can change group', 8, 'change_group'),
 (31, 'Can delete group', 8, 'delete_group'),
 (32, 'Can view group', 8, 'view_group'),
-(33, 'Can add group instance', 9, 'add_groupinstance'),
-(34, 'Can change group instance', 9, 'change_groupinstance'),
-(35, 'Can delete group instance', 9, 'delete_groupinstance'),
-(36, 'Can view group instance', 9, 'view_groupinstance');
+(33, 'Can add member', 9, 'add_member'),
+(34, 'Can change member', 9, 'change_member'),
+(35, 'Can delete member', 9, 'delete_member'),
+(36, 'Can view member', 9, 'view_member');
 
 -- --------------------------------------------------------
 
@@ -122,11 +122,9 @@ CREATE TABLE `django_admin_log` (
 --
 
 INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`, `action_flag`, `change_message`, `content_type_id`, `user_id`) VALUES
-(1, '2019-07-27 10:37:07.827752', '1', 'mioshine2011@gmail.com', 2, '[{\"changed\": {\"fields\": [\"first_name\", \"last_name\", \"email\"]}}, {\"added\": {\"name\": \"user profile\", \"object\": \"UserProfile object (1)\"}}]', 6, 1),
-(2, '2019-08-01 12:18:15.054143', '1', 'GREATMAN', 1, '[{\"added\": {}}]', 8, 1),
-(3, '2019-08-01 16:52:07.329518', '1', 'HERE', 2, '[{\"changed\": {\"fields\": [\"description\", \"name\", \"amount\"]}}]', 8, 1),
-(4, '2019-08-01 16:52:28.642101', '1', 'HERE', 2, '[]', 8, 1),
-(5, '2019-08-01 17:39:08.768627', '2', 'GReatmen', 1, '[{\"added\": {}}]', 8, 1);
+(3, '2019-08-02 06:34:55.654302', '1', 'GREATMEN', 3, '', 8, 2),
+(4, '2019-08-02 06:35:17.834049', '2', 'GREATMEN', 1, '[{\"added\": {}}]', 8, 2),
+(5, '2019-08-02 06:39:11.513854', '2', 'GREATMEN', 2, '[{\"changed\": {\"name\": \"member\", \"object\": \"Member object (42df6bda-ebab-4018-b06d-9fcc7c56ad70)\", \"fields\": [\"contribution\"]}}]', 8, 2);
 
 -- --------------------------------------------------------
 
@@ -150,7 +148,7 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (2, 'auth', 'permission'),
 (4, 'contenttypes', 'contenttype'),
 (8, 'esusu', 'group'),
-(9, 'esusu', 'groupinstance'),
+(9, 'esusu', 'member'),
 (6, 'esusu', 'user'),
 (7, 'esusu', 'userprofile'),
 (5, 'sessions', 'session');
@@ -173,26 +171,29 @@ CREATE TABLE `django_migrations` (
 --
 
 INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
-(1, 'contenttypes', '0001_initial', '2019-07-27 10:32:16.833101'),
-(2, 'contenttypes', '0002_remove_content_type_name', '2019-07-27 10:32:19.751020'),
-(3, 'auth', '0001_initial', '2019-07-27 10:32:22.591979'),
-(4, 'auth', '0002_alter_permission_name_max_length', '2019-07-27 10:32:33.737050'),
-(5, 'auth', '0003_alter_user_email_max_length', '2019-07-27 10:32:33.837632'),
-(6, 'auth', '0004_alter_user_username_opts', '2019-07-27 10:32:34.067189'),
-(7, 'auth', '0005_alter_user_last_login_null', '2019-07-27 10:32:34.189639'),
-(8, 'auth', '0006_require_contenttypes_0002', '2019-07-27 10:32:34.304002'),
-(9, 'auth', '0007_alter_validators_add_error_messages', '2019-07-27 10:32:34.423002'),
-(10, 'auth', '0008_alter_user_username_max_length', '2019-07-27 10:32:34.533014'),
-(11, 'auth', '0009_alter_user_last_name_max_length', '2019-07-27 10:32:34.707899'),
-(12, 'auth', '0010_alter_group_name_max_length', '2019-07-27 10:32:36.640144'),
-(13, 'auth', '0011_update_proxy_permissions', '2019-07-27 10:32:36.761887'),
-(14, 'esusu', '0001_initial', '2019-07-27 10:32:40.364883'),
-(15, 'admin', '0001_initial', '2019-07-27 10:32:53.898426'),
-(16, 'admin', '0002_logentry_remove_auto_add', '2019-07-27 10:32:57.916156'),
-(17, 'admin', '0003_logentry_add_action_flag_choices', '2019-07-27 10:32:58.013233'),
-(18, 'sessions', '0001_initial', '2019-07-27 10:32:59.130851'),
-(19, 'esusu', '0002_auto_20190731_0733', '2019-07-31 07:34:45.884726'),
-(20, 'esusu', '0003_auto_20190801_0909', '2019-08-01 16:49:16.691097');
+(1, 'contenttypes', '0001_initial', '2019-08-02 05:02:04.799413'),
+(2, 'contenttypes', '0002_remove_content_type_name', '2019-08-02 05:02:07.663651'),
+(3, 'auth', '0001_initial', '2019-08-02 05:02:10.238803'),
+(4, 'auth', '0002_alter_permission_name_max_length', '2019-08-02 05:02:19.110870'),
+(5, 'auth', '0003_alter_user_email_max_length', '2019-08-02 05:02:19.239460'),
+(6, 'auth', '0004_alter_user_username_opts', '2019-08-02 05:02:19.416613'),
+(7, 'auth', '0005_alter_user_last_login_null', '2019-08-02 05:02:19.594721'),
+(8, 'auth', '0006_require_contenttypes_0002', '2019-08-02 05:02:19.688970'),
+(9, 'auth', '0007_alter_validators_add_error_messages', '2019-08-02 05:02:19.783975'),
+(10, 'auth', '0008_alter_user_username_max_length', '2019-08-02 05:02:19.872492'),
+(11, 'auth', '0009_alter_user_last_name_max_length', '2019-08-02 05:02:19.961244'),
+(12, 'auth', '0010_alter_group_name_max_length', '2019-08-02 05:02:21.792824'),
+(13, 'auth', '0011_update_proxy_permissions', '2019-08-02 05:02:21.912945'),
+(14, 'esusu', '0001_initial', '2019-08-02 05:02:25.748601'),
+(15, 'admin', '0001_initial', '2019-08-02 05:02:36.937146'),
+(16, 'admin', '0002_logentry_remove_auto_add', '2019-08-02 05:02:40.936220'),
+(17, 'admin', '0003_logentry_add_action_flag_choices', '2019-08-02 05:02:41.087517'),
+(18, 'esusu', '0002_auto_20190731_0733', '2019-08-02 05:02:48.774200'),
+(19, 'esusu', '0003_auto_20190801_0909', '2019-08-02 05:02:58.618419'),
+(20, 'esusu', '0004_auto_20190801_1618', '2019-08-02 05:03:03.439204'),
+(21, 'esusu', '0005_auto_20190802_0458', '2019-08-02 05:03:08.503637'),
+(22, 'sessions', '0001_initial', '2019-08-02 05:03:13.965542'),
+(23, 'esusu', '0006_auto_20190802_0629', '2019-08-02 06:29:34.116112');
 
 -- --------------------------------------------------------
 
@@ -211,8 +212,7 @@ CREATE TABLE `django_session` (
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
-('3a4khd93m4wis8aiygmjfbajhr8b03du', 'YmIwMmU3OTNiNGRkZTFmYzI2MmRlZjQxMmRmZWViMzQwNzc5YWE3NDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIxNDE5MWM1Y2ZlYzlhNjhhNzZmYmRlZjUwNWI3ZWIzZDYyMzAzMDQ2In0=', '2019-08-15 10:49:38.106394'),
-('schhs646wd2pf5bqnpzo903z54jaox83', 'YmIwMmU3OTNiNGRkZTFmYzI2MmRlZjQxMmRmZWViMzQwNzc5YWE3NDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIxNDE5MWM1Y2ZlYzlhNjhhNzZmYmRlZjUwNWI3ZWIzZDYyMzAzMDQ2In0=', '2019-08-10 10:35:32.770035');
+('h1k6u1n2aii9iw8889pt7sxkz7seq57v', 'YjZlZDMwNDBhOTE1ZDhiYmQ3ZDdlYzE3YWUwMmRhY2Q5YTEyMTc4Nzp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJkMWJlZWU4ZTExYjkwMDIyYjA4YWIyZjkwYjczMzdmM2NiMGJlOGQ5In0=', '2019-08-16 06:34:42.128318');
 
 -- --------------------------------------------------------
 
@@ -224,11 +224,11 @@ CREATE TABLE `esusu_group` (
   `id` int(11) NOT NULL,
   `description` longtext NOT NULL,
   `max_number` int(11) NOT NULL,
-  `slot` varchar(255) NOT NULL,
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `is_searchable` varchar(1) NOT NULL,
+  `slot` varchar(255) DEFAULT NULL,
   `amount` decimal(10,2) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -237,25 +237,31 @@ CREATE TABLE `esusu_group` (
 -- Dumping data for table `esusu_group`
 --
 
-INSERT INTO `esusu_group` (`id`, `description`, `max_number`, `slot`, `created_at`, `updated_at`, `user_id`, `is_searchable`, `amount`, `name`) VALUES
-(1, 'HERE', 10, '[7, 10, 3, 2, 9, 1, 6, 4, 5, 8]', '2019-08-01 12:18:15.049424', '2019-08-01 16:52:28.638759', 1, '1', '50000.00', 'GREATMEN'),
-(2, 'GReatmen', 10, '[4, 10, 2, 3, 6, 8, 5, 7, 1, 9]', '2019-08-01 17:39:08.763549', '2019-08-01 17:39:08.763630', 6, '1', '45000.00', 'SYSSOFT');
+INSERT INTO `esusu_group` (`id`, `description`, `max_number`, `created_at`, `updated_at`, `user_id`, `is_searchable`, `slot`, `amount`, `name`) VALUES
+(2, 'HEY', 10, '2019-08-02 06:35:17.832918', '2019-08-02 06:39:11.508907', 2, '1', NULL, '50000.00', 'GREATMEN');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `esusu_groupinstance`
+-- Table structure for table `esusu_member`
 --
 
-CREATE TABLE `esusu_groupinstance` (
+CREATE TABLE `esusu_member` (
   `id` char(32) NOT NULL,
-  `contribution` int(11) NOT NULL,
+  `rank` int(11) DEFAULT NULL,
+  `contribution` decimal(10,2) DEFAULT NULL,
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) NOT NULL,
   `group_id` int(11) DEFAULT NULL,
-  `member_id` int(11) DEFAULT NULL,
-  `rank` int(11) NOT NULL
+  `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `esusu_member`
+--
+
+INSERT INTO `esusu_member` (`id`, `rank`, `contribution`, `created_at`, `updated_at`, `group_id`, `user_id`) VALUES
+('42df6bdaebab4018b06d9fcc7c56ad70', NULL, '50000.00', '2019-08-02 06:35:17.831997', '2019-08-02 06:39:11.510269', 2, 2);
 
 -- --------------------------------------------------------
 
@@ -282,12 +288,7 @@ CREATE TABLE `esusu_user` (
 --
 
 INSERT INTO `esusu_user` (`id`, `password`, `last_login`, `is_superuser`, `first_name`, `last_name`, `is_staff`, `is_active`, `date_joined`, `username`, `email`) VALUES
-(1, 'pbkdf2_sha256$150000$DnkxTLvaDsns$blqHMEe6OdVtvfH92bx5WNl8blWhgKdQ/YfJbsaFuEk=', '2019-08-01 10:49:37.911153', 1, 'Micheal', 'Oj', 1, 1, '2019-07-27 10:34:12.000000', 'admin', 'mioshine2011@gmail.com'),
-(2, 'pbkdf2_sha256$150000$PQ5lw3GbKes2$Q54agaVhkkOngpcCPw7d9dZkDbBwSm7WcgYygbYurD0=', NULL, 0, 'Micheal', '', 0, 1, '2019-07-29 05:03:40.191194', NULL, 'mioshine@gmail.com'),
-(3, 'pbkdf2_sha256$150000$ZqlXa8QtH61f$TfBCRH1W0pipAUvisxNYD4Fc7EStNahB2qt1iTd4eLM=', NULL, 0, 'Micheal', '', 0, 1, '2019-07-29 05:05:13.314683', NULL, 'amin@gmail.com'),
-(4, 'pbkdf2_sha256$150000$7IJSx7XNjM3t$Ysu2jktXp1xsnB0qDHCiLmwdbF4kzhRZmQOP05Fd4uU=', NULL, 0, 'mike', '', 0, 1, '2019-07-29 05:17:11.541448', NULL, 'moj@g.vom'),
-(5, 'pbkdf2_sha256$150000$fUxCcQNXyHKi$dLPv45Kj3MCNK1RSeTwFhFZ0zjLH8+Lxb3J8J2pvty4=', NULL, 0, 'mike', '', 0, 1, '2019-07-29 05:21:36.295856', NULL, 'jj@g.vom'),
-(6, 'pbkdf2_sha256$150000$YO6hBshO3mOi$cvz/5rCKpsAgfibzI34XpYUUzQvpovjYJTZsGrvYkvY=', NULL, 0, 'test', '', 0, 1, '2019-07-30 05:23:47.268395', NULL, 'test@test.com');
+(2, 'pbkdf2_sha256$150000$5NlH7Eatqavi$vyHRTySOteNeTcrn+B3K8grc8ZYGtlkYZqlyi6yrHso=', '2019-08-02 06:34:42.037627', 1, 'Mike', '', 1, 1, '2019-08-02 06:34:35.762451', 'MikeGreat', 'test@test.com');
 
 -- --------------------------------------------------------
 
@@ -305,15 +306,6 @@ CREATE TABLE `esusu_userprofile` (
   `photo` varchar(100) DEFAULT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `esusu_userprofile`
---
-
-INSERT INTO `esusu_userprofile` (`id`, `title`, `dob`, `address`, `country`, `city`, `photo`, `user_id`) VALUES
-(1, 'Mr', '2019-07-23', 'Jasojo Avenue', 'Nigeria', 'Lagos', 'uploads/IMG_4189.jpg', 1),
-(2, '', '2019-07-29', '', '', '', '', 4),
-(3, '', '2019-07-29', '', '', '', '', 5);
 
 -- --------------------------------------------------------
 
@@ -398,15 +390,16 @@ ALTER TABLE `django_session`
 --
 ALTER TABLE `esusu_group`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `esusu_group_name_20a7619b_uniq` (`name`),
   ADD KEY `esusu_group_user_id_a0553871_fk_esusu_user_id` (`user_id`);
 
 --
--- Indexes for table `esusu_groupinstance`
+-- Indexes for table `esusu_member`
 --
-ALTER TABLE `esusu_groupinstance`
+ALTER TABLE `esusu_member`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `esusu_groupinstance_group_id_71a6cbbe_fk_esusu_group_id` (`group_id`),
-  ADD KEY `esusu_groupinstance_member_id_dca705c3_fk_esusu_user_id` (`member_id`);
+  ADD KEY `esusu_member_group_id_d8f6faf1_fk_esusu_group_id` (`group_id`),
+  ADD KEY `esusu_member_user_id_22aaac45_fk_esusu_user_id` (`user_id`);
 
 --
 -- Indexes for table `esusu_user`
@@ -476,7 +469,7 @@ ALTER TABLE `django_content_type`
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `esusu_group`
@@ -488,13 +481,13 @@ ALTER TABLE `esusu_group`
 -- AUTO_INCREMENT for table `esusu_user`
 --
 ALTER TABLE `esusu_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `esusu_userprofile`
 --
 ALTER TABLE `esusu_userprofile`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `esusu_user_groups`
@@ -539,11 +532,11 @@ ALTER TABLE `esusu_group`
   ADD CONSTRAINT `esusu_group_user_id_a0553871_fk_esusu_user_id` FOREIGN KEY (`user_id`) REFERENCES `esusu_user` (`id`);
 
 --
--- Constraints for table `esusu_groupinstance`
+-- Constraints for table `esusu_member`
 --
-ALTER TABLE `esusu_groupinstance`
-  ADD CONSTRAINT `esusu_groupinstance_group_id_71a6cbbe_fk_esusu_group_id` FOREIGN KEY (`group_id`) REFERENCES `esusu_group` (`id`),
-  ADD CONSTRAINT `esusu_groupinstance_member_id_dca705c3_fk_esusu_user_id` FOREIGN KEY (`member_id`) REFERENCES `esusu_user` (`id`);
+ALTER TABLE `esusu_member`
+  ADD CONSTRAINT `esusu_member_group_id_d8f6faf1_fk_esusu_group_id` FOREIGN KEY (`group_id`) REFERENCES `esusu_group` (`id`),
+  ADD CONSTRAINT `esusu_member_user_id_22aaac45_fk_esusu_user_id` FOREIGN KEY (`user_id`) REFERENCES `esusu_user` (`id`);
 
 --
 -- Constraints for table `esusu_userprofile`

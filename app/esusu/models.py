@@ -36,7 +36,7 @@ class Group(models.Model):
     """ Model representing a book """
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     description = models.TextField(max_length=1000, help_text='Enter a brief description of this group')
-    name = models.CharField(max_length=255, null=True)
+    name = models.CharField(max_length=255, null=True, unique=True)
     max_number = models.IntegerField()
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     slot = models.CharField(max_length=255, null=True, blank=True)
@@ -51,48 +51,38 @@ class Group(models.Model):
     is_searchable = models.CharField(max_length=1, default=1, choices=IS_SEARCHABLE)
 
     def __str__(self):
-        return self.description
+        return self.name
 
     def get_absolute_url(self):
         return reverse('esusu:group-detail', args=[str(self.id)])
-    
-    
+
     def create_random_slot(self):
         total_slot = self.max_number
         my_randoms = random.sample(range(1, total_slot + 1), total_slot)
         print(my_randoms)
-        return my_randoms 
+        return my_randoms
 
-    def save(self, *args, **kwargs):
-        random_slot = self.create_random_slot()
-        self.slot = random_slot
-        super(Group, self).save(*args, **kwargs)
-
-
-    # def save_group_admin(self):
-    #     self.group.member
-    #     self.rank
-    #     self
-    #     self.group.save()
-
-
-    #
-    # def display_genre(self):
-    #     """Create a string for the Genre. This is required to display genre in Admin."""
-    #     return ', '.join(genre.name for genre in self.genre.all()[:3])
-    #
-    # display_genre.short_description = 'Genre'
+    # def save(self, *args, **kwargs):
+    #     print(self)
+    #     print(kwargs)
+    #     Member.objects.create(group=self.pk,
+    #                           user=self.user,
+    #                           )
+    #     super(Group, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     random_slot = self.create_random_slot()
+    #     self.slot = random_slot
+    #     super(Group, self).save(*args, **kwargs)
 
 
-class GroupInstance(models.Model):
-
+class Member(models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           help_text="Unique ID for this particular book across whole library")
-    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True)
-    member = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    rank = models.IntegerField(null=True)
-    contribution = models.DecimalField(max_digits=10, decimal_places=2)
+    group = models.ForeignKey(Group, related_name='members', on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    rank = models.IntegerField(null=True, blank=True)
+    contribution = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

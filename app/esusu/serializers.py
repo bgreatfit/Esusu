@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, UserProfile, Group, GroupInstance
+from .models import User, UserProfile, Group, Member
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -9,11 +9,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    groupinstances = serializers.HyperlinkedRelatedField(many=True, read_only=True,
+    members = serializers.HyperlinkedRelatedField(many=True, read_only=True,
                                                 view_name='esusu:group-detail')
     class Meta:
         model = Group
-        fields = ('user', 'description', 'max_number', 'slot', 'is_searchable', 'created_at', 'updated_at', 'groupinstances')
+        fields = ('user', 'description', 'max_number', 'slot', 'is_searchable', 'created_at', 'updated_at', 'members')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -55,9 +55,9 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class GroupInstanceSerializer(serializers.ModelSerializer):
+class MemberSerializer(serializers.ModelSerializer):
 
-    model = GroupInstance
+    model = Member
 
     class Metal:
-        fields = ('id', 'group', 'member', 'rank', 'contribution', 'created_at', 'updated_at')
+        fields = ('id', 'group', 'user', 'rank', 'contribution', 'created_at', 'updated_at')

@@ -36,9 +36,8 @@ class ListCreateGroup(generics.ListCreateAPIView):
     serializer_class = GroupSerializer
 
     def get_queryset(self):
-
-        group = Group.objects.all()
-        if self.kwargs.get('user_pk') is not  None:
+        group = Group.objects.filter(is_searchable=1)
+        if self.kwargs.get('user_pk') is not None:
             group = Group.objects.filter(user_id=self.kwargs.get('user_pk'))
         return group
 
@@ -46,7 +45,7 @@ class ListCreateGroup(generics.ListCreateAPIView):
         user = get_object_or_404(
             User, pk=self.kwargs.get('user_pk')
         )
-        serializer.save(course=user)
+        serializer.save(user=user)
 
 
 class RetrieveUpdateDestroyGroup(generics.RetrieveUpdateDestroyAPIView):
