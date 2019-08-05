@@ -2,8 +2,8 @@
 -- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Host: 172.18.0.2
--- Generation Time: Aug 02, 2019 at 07:17 AM
+-- Host: cowrywise-mysql
+-- Generation Time: Aug 05, 2019 at 06:28 AM
 -- Server version: 5.6.43
 -- PHP Version: 7.2.14
 
@@ -124,7 +124,14 @@ CREATE TABLE `django_admin_log` (
 INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`, `action_flag`, `change_message`, `content_type_id`, `user_id`) VALUES
 (3, '2019-08-02 06:34:55.654302', '1', 'GREATMEN', 3, '', 8, 2),
 (4, '2019-08-02 06:35:17.834049', '2', 'GREATMEN', 1, '[{\"added\": {}}]', 8, 2),
-(5, '2019-08-02 06:39:11.513854', '2', 'GREATMEN', 2, '[{\"changed\": {\"name\": \"member\", \"object\": \"Member object (42df6bda-ebab-4018-b06d-9fcc7c56ad70)\", \"fields\": [\"contribution\"]}}]', 8, 2);
+(5, '2019-08-02 06:39:11.513854', '2', 'GREATMEN', 2, '[{\"changed\": {\"name\": \"member\", \"object\": \"Member object (42df6bda-ebab-4018-b06d-9fcc7c56ad70)\", \"fields\": [\"contribution\"]}}]', 8, 2),
+(6, '2019-08-03 08:18:39.570372', '3', 'SYSSOFT', 1, '[{\"added\": {}}]', 8, 2),
+(7, '2019-08-03 08:45:56.706973', '5', 'English', 1, '[{\"added\": {}}]', 8, 2),
+(8, '2019-08-03 15:05:47.496774', '6', 'Zipp', 1, '[{\"added\": {}}]', 8, 2),
+(9, '2019-08-03 15:13:49.513827', '9', 'MEN', 1, '[{\"added\": {}}]', 8, 2),
+(10, '2019-08-03 15:15:25.233994', '9', 'MEN', 2, '[{\"changed\": {\"name\": \"member\", \"object\": \"Member object (e59d753d-3acd-4164-81fb-63fcabd2d032)\", \"fields\": [\"contribution\"]}}]', 8, 2),
+(11, '2019-08-04 04:52:20.990214', '10', 'UNIQUE', 3, '', 8, 2),
+(12, '2019-08-04 04:52:21.026775', '10', 'UNIQUE', 3, '', 8, 2);
 
 -- --------------------------------------------------------
 
@@ -238,7 +245,11 @@ CREATE TABLE `esusu_group` (
 --
 
 INSERT INTO `esusu_group` (`id`, `description`, `max_number`, `created_at`, `updated_at`, `user_id`, `is_searchable`, `slot`, `amount`, `name`) VALUES
-(2, 'HEY', 10, '2019-08-02 06:35:17.832918', '2019-08-02 06:39:11.508907', 2, '1', NULL, '50000.00', 'GREATMEN');
+(2, 'HEY', 10, '2019-08-02 06:35:17.832918', '2019-08-02 06:39:11.508907', 2, '1', NULL, '50000.00', 'GREATMEN'),
+(3, 'People', 5, '2019-08-03 08:18:39.566851', '2019-08-03 08:18:39.566905', 2, '0', NULL, '50000.00', 'SYSSOFT'),
+(5, 'FELLAS', 5, '2019-08-03 08:45:56.704213', '2019-08-03 08:45:56.704262', 2, '1', NULL, '10000.00', 'English'),
+(6, 'HAPPY', 30, '2019-08-03 15:05:47.494652', '2019-08-03 15:05:47.494711', 2, '1', NULL, '500000.00', 'Zipp'),
+(9, 'MEN', 10, '2019-08-03 15:13:49.509554', '2019-08-03 15:15:25.227478', 2, '1', NULL, '5000.00', 'MEN');
 
 -- --------------------------------------------------------
 
@@ -261,7 +272,9 @@ CREATE TABLE `esusu_member` (
 --
 
 INSERT INTO `esusu_member` (`id`, `rank`, `contribution`, `created_at`, `updated_at`, `group_id`, `user_id`) VALUES
-('42df6bdaebab4018b06d9fcc7c56ad70', NULL, '50000.00', '2019-08-02 06:35:17.831997', '2019-08-02 06:39:11.510269', 2, 2);
+('5e59d753d3acd416481fb63fcabd2d03', NULL, '50000.00', '2019-08-03 15:13:49.511037', '2019-08-03 15:15:25.231413', 9, 2),
+('e59d753d3acd416481fb63fcabd2d032', NULL, NULL, '2019-08-03 17:22:58.227241', '2019-08-03 17:22:58.227317', NULL, 7),
+('e59d753d3acd416481fb63fcabd2d037', NULL, '50000.00', '2019-08-02 06:35:17.831997', '2019-08-02 06:39:11.510269', 2, 2);
 
 -- --------------------------------------------------------
 
@@ -288,7 +301,12 @@ CREATE TABLE `esusu_user` (
 --
 
 INSERT INTO `esusu_user` (`id`, `password`, `last_login`, `is_superuser`, `first_name`, `last_name`, `is_staff`, `is_active`, `date_joined`, `username`, `email`) VALUES
-(2, 'pbkdf2_sha256$150000$5NlH7Eatqavi$vyHRTySOteNeTcrn+B3K8grc8ZYGtlkYZqlyi6yrHso=', '2019-08-02 06:34:42.037627', 1, 'Mike', '', 1, 1, '2019-08-02 06:34:35.762451', 'MikeGreat', 'test@test.com');
+(2, 'pbkdf2_sha256$150000$5NlH7Eatqavi$vyHRTySOteNeTcrn+B3K8grc8ZYGtlkYZqlyi6yrHso=', '2019-08-02 06:34:42.037627', 1, 'Mike', '', 1, 1, '2019-08-02 06:34:35.762451', 'MikeGreat', 'test@test.com'),
+(3, 'pbkdf2_sha256$150000$9xHerXYrUSiJ$Zy/7I435ez71wWrYF/xXlgRjj9LH7nUZCc5ZKQD+JQA=', NULL, 0, '', '', 0, 1, '2019-08-03 16:41:26.440447', NULL, 'mioshine2011@gmail.com'),
+(4, 'pbkdf2_sha256$150000$E8a1KE9wQHgW$t8OTVqNSu7EuebqKmfnJZqao/Lbn/FTC62h+Jfewhzw=', NULL, 0, '', '', 0, 1, '2019-08-03 16:48:08.010225', NULL, 'mioshine2000@gmail.com'),
+(5, 'pbkdf2_sha256$150000$4mr1BAvwSV9J$Qql6ci3LkdajBpWdzI0tmYJr4Nhjk1Po/Wnnk5+cr80=', NULL, 0, '', '', 0, 1, '2019-08-03 16:57:07.241919', NULL, 'mioshine2008@gmail.com'),
+(6, 'pbkdf2_sha256$150000$XmoCvfwFzmiD$yha3z/NKUfQvvm1C+bbP3nNCpSYV2ymzBS9imqwwnTQ=', NULL, 0, '', '', 0, 1, '2019-08-03 16:59:43.825423', NULL, 'mioshine2098@gmail.com'),
+(7, 'pbkdf2_sha256$150000$u5dehWU9CBTA$zvXnvx9Ljr2xDU/MZqc/Or2PhQT8J2E0OMx2Ggcicok=', NULL, 0, '', '', 0, 1, '2019-08-03 17:05:46.450078', NULL, 'mioshine2001@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -457,7 +475,7 @@ ALTER TABLE `auth_permission`
 -- AUTO_INCREMENT for table `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `django_content_type`
@@ -475,13 +493,13 @@ ALTER TABLE `django_migrations`
 -- AUTO_INCREMENT for table `esusu_group`
 --
 ALTER TABLE `esusu_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `esusu_user`
 --
 ALTER TABLE `esusu_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `esusu_userprofile`

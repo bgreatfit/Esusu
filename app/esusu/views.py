@@ -4,11 +4,11 @@ from rest_framework import viewsets, permissions, generics
 # Create your views here.
 from rest_framework.permissions import AllowAny
 
-from .models import User, Group
-from .serializers import UserSerializer, UserProfileSerializer, GroupSerializer
+from .models import User, Group, Member
+from .serializers import UserSerializer, GroupSerializer, MemberSerializer
 
 # Also add these imports
-from .permissions import IsLoggedInUserOrAdmin, IsAdminUser, IsOwnerOrReadOnly
+from .permissions import IsLoggedInUserOrAdmin, IsAdminUser, IsOwnerOrReadOnly, IsOwnerOr
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -27,24 +27,32 @@ class UserViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class UserProfileViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserProfileSerializer
+# class UserProfileViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserProfileSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+        queryset = Group.objects.all()
+        serializer_class = GroupSerializer
 
 
 class ListCreateGroup(generics.ListCreateAPIView):
     serializer_class = GroupSerializer
+    # permission_classes = (permissions.IsAuthenticated,
+    #                       IsOwnerOr,)
 
     def get_queryset(self):
         group = Group.objects.filter(is_searchable=1)
-        if self.kwargs.get('user_pk') is not None:
-            group = Group.objects.filter(user_id=self.kwargs.get('user_pk'))
+        if self.request.user.id is not None:
+            group = Group.objects.filter(user_id=self.request.user.id)
         return group
 
     def perform_create(self, serializer):
         user = get_object_or_404(
-            User, pk=self.kwargs.get('user_pk')
+            User, pk=self.request.user.id
         )
+
         serializer.save(user=user)
 
 
@@ -56,6 +64,36 @@ class RetrieveUpdateDestroyGroup(generics.RetrieveUpdateDestroyAPIView):
         return get_object_or_404(
             Group,
             user_id=self.kwargs.get('user_pk'),
+            pk=self.kwargs.get('pk')
+        )
+
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,)
+
+
+class ListCreateMember(generics.ListCreateAPIView):
+    serializer_class = MemberSerializer
+
+    def get_queryset(self):
+        member = Member.objects.filter(group_id=self.kwargs.get('group_pk'))
+        return member
+
+    def perform_create(self, serializer):
+        group = get_object_or_404(
+            Group, pk=self.kwargs.get('group_pk')
+        )
+
+        serializer.save(group=group)
+
+
+class RetrieveUpdateDestroyMember(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Member.objects.all()
+    serializer_class = MemberSerializer
+
+    def get_queryset(self):
+        return get_object_or_404(
+            Member,
+            group_id=self.kwargs.get('group_pk'),
             pk=self.kwargs.get('pk')
         )
 

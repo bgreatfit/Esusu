@@ -16,19 +16,24 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path, include
 from rest_framework.routers import SimpleRouter,DefaultRouter
-from esusu.views import UserViewSet, UserProfileViewSet
+from esusu.views import UserViewSet
 from rest_framework_simplejwt import views as jwt_views
+
+from esusu.views import GroupViewSet
 
 urlpatterns = [
     # Your URLs...
-    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
-router.register(r'profiles', UserProfileViewSet)
+# router.register(r'profiles', UserProfileViewSet)
 urlpatterns += [
     path('admin/', admin.site.urls),
+]
+urlpatterns += [
+    path(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 urlpatterns += [
         re_path('api/v1/', include('esusu.urls')),

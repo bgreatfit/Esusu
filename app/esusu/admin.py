@@ -1,15 +1,15 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, UserProfile, Member, Group
+from .models import User, Member, Group
 
 
 # Register your models here.
 
 
-class UserProfileInline(admin.StackedInline):
-    model = UserProfile
-    can_delete = False
+# class UserProfileInline(admin.StackedInline):
+#     model = UserProfile
+#     can_delete = False
 
 
 class GroupInline(admin.StackedInline):
@@ -41,12 +41,10 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ['id', 'group', 'user', 'rank', 'contribution', 'created_at', 'updated_at']
+    list_display = ['id', 'group', 'user', 'rank', 'contribution']
     list_select_related = ('group',)
     list_filter = ('created_at', 'rank')
     fieldsets = (
         (None, {'fields': ('group', 'id')}),
-        ('Availability', {
-            'fields': ('status', 'member', 'contribution', 'created_at', 'updated_at')
-        }),
+
     )
