@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.reverse import reverse
+
 from .models import User, Group, Member
 #
 #
@@ -12,7 +14,7 @@ class MemberSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Member
-        fields = ('id', 'group', 'user', 'rank', 'contribution', 'created_at', 'updated_at')
+        fields = ('id', 'rank', 'contribution', 'created_at', 'updated_at')
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -26,7 +28,7 @@ class GroupSerializer(serializers.ModelSerializer):
             'members': {'read_only': True}
         }
         model = Group
-        fields = ('id', 'user_id', 'description', 'max_number', 'name', 'is_searchable', 'created_at', 'updated_at',
+        fields = ('id', 'description', 'max_number', 'name', 'is_searchable', 'created_at', 'updated_at',
                   'members')
 
 
@@ -35,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
     #                                               queryset=UserProfile.objects.all())
     # profile = UserProfileSerializer(required=True)
     groups = serializers.HyperlinkedRelatedField(many=True, read_only=True,
-                                                 view_name='group-list'
+                                                 view_name='group-detail'
                                                  )
 
     class Meta:
@@ -71,3 +73,22 @@ class UserSerializer(serializers.ModelSerializer):
 
         return instance
 
+
+class CustomerHyperlink(serializers.HyperlinkedRelatedField):
+    # We define these as class attributes, so we don't need to pass them as arguments.
+    view_name = 'customer-detail'
+    queryset = Member.objects.all()
+
+    def get_url(self, obj, view_name, request, format):
+        url_kwargs = {
+            'organization_slug': obj.organization.slug,
+            'customer_pk': obj.pk
+        }
+        return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
+
+    def get_object(self, view_name, view_args, view_kwargs):
+        lookup_kwargs = {
+           'organization__slug': view_kwargs['organization_slug'],
+           'pk': view_kwargs['customer_pk']
+        }
+        return self.get_queryset().get(**lookup_kwargs)

@@ -13,7 +13,7 @@ from django.db.models.signals import post_save
 
 
 class User(AbstractUser):
-    username = models.CharField(max_length=50, help_text="enter username")
+    username = models.CharField(max_length=50, help_text="enter username", unique=True)
     email = models.EmailField(_('email address'), unique=True)
 
     USERNAME_FIELD = 'email'
@@ -36,11 +36,12 @@ class User(AbstractUser):
 
 class Group(models.Model):
     """ Model representing a book """
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='groups')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     description = models.TextField(max_length=1000, help_text='Enter a brief description of this group')
-    name = models.CharField(max_length=255, unique=True, blank=False)
+    name = models.CharField(max_length=55, unique=True, blank=False)
+    slug = models.CharField(max_length=255, unique=True, blank=False)
     max_number = models.IntegerField()
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     slot = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

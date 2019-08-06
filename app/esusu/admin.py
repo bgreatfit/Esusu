@@ -44,7 +44,4 @@ class MemberAdmin(admin.ModelAdmin):
     list_display = ['id', 'group', 'user', 'rank', 'contribution']
     list_select_related = ('group',)
     list_filter = ('created_at', 'rank')
-    fieldsets = (
-        (None, {'fields': ('group', 'id')}),
 
-    )
