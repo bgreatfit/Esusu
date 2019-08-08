@@ -39,7 +39,7 @@ class Group(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     description = models.TextField(max_length=1000, help_text='Enter a brief description of this group')
     name = models.CharField(max_length=55, unique=True, blank=False)
-    slug = models.CharField(max_length=255, unique=True, blank=False)
+    slug = models.CharField(max_length=255, unique=True, blank=False,null=True)
     max_number = models.IntegerField()
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     slot = models.CharField(max_length=255, null=True, blank=True)
@@ -66,13 +66,13 @@ class Group(models.Model):
         return my_randoms
 
 
-@receiver(post_save, sender=Group)
-def create_member(sender, instance, created, **kwargs):
-    print(f'Here Now {sender}, {instance}, {created}')
-    if created:
-        Member.objects.create(group=instance,
-                              user_id=instance.user_id,
-                              )
+# @receiver(post_save, sender=Group)
+# def create_member(sender, instance, created, **kwargs):
+#     print(f'Here Now {sender}, {instance}, {created}')
+#     if created:
+#         Member.objects.create(group=instance,
+#                               user_id=instance.user_id,
+#                               )
 
 #signals.post_save.connect(receiver=create_customer, sender=Customer)
     # def save(self, *args, **kwargs):
@@ -90,8 +90,8 @@ def create_member(sender, instance, created, **kwargs):
 
 class Member(models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4,
-                          help_text="Unique ID for this particular book across whole library")
+    # id = models.UUIDField(primary_key=True, default=uuid.uuid4,
+    #                       help_text="Unique ID for this particular book across whole library")
     group = models.ForeignKey(Group, related_name='members', on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="members")
     rank = models.IntegerField(null=True, blank=True)

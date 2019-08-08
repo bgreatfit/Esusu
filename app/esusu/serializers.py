@@ -35,10 +35,11 @@ class GroupSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     # profile = serializers.HyperlinkedRelatedField(many=True, required=True, view_name='esusu:user-detail',
     #                                               queryset=UserProfile.objects.all())
-    # profile = UserProfileSerializer(required=True)
-    groups = serializers.HyperlinkedRelatedField(many=True, read_only=True,
-                                                 view_name='group-detail'
-                                                 )
+    groups = GroupSerializer(required=True)
+    # groups = serializers.HyperlinkedRelatedField(many=True,
+    #                                              queryset= Group.objects.all(),
+    #                                              view_name='group-detail'
+    #                                              )
 
     class Meta:
         model = User

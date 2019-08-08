@@ -8,32 +8,27 @@ from .models import User, Group, Member
 from .serializers import UserSerializer, GroupSerializer, MemberSerializer
 
 # Also add these imports
-from .permissions import IsLoggedInUserOrAdmin, IsAdminUser, IsOwnerOrReadOnly, IsOwnerOr, IsAdmin
+from .permissions import IsLoggedInUserOrAdmin, IsAdminUser, IsOwnerOrReadOnly, IsAdmin, IsOwner, IsGroupOwner
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticated,
-                          IsOwnerOr,)
 
-    # Add this code block
-    # def get_permissions(self):
-    #     print(self.request.user.is_staff)
-    #     permission_classes = []
-    #     if self.action == 'create':
-    #         print('1')
-    #         permission_classes = [AllowAny]
-    #     elif self.action == 'retrieve' or self.action == 'update' or self.action == 'partial_update':
-    #         print('2')
-    #         permission_classes = [IsLoggedInUserOrAdmin]
-    #     elif self.action == 'list':
-    #         permission_classes = [IsAdmin]
-    #         print('3')
-    #     elif self.action == 'destroy':
-    #         permission_classes = [IsLoggedInUserOrAdmin]
-    #     print(permission_classes)
-    #     return [permission() for permission in permission_classes]
+    #Add this code block
+    def get_permissions(self):
+        print(self.request.user)
+        permission_classes = []
+        if self.action == 'create':
+            permission_classes = [AllowAny]
+        elif self.action == 'retrieve' or self.action == 'update' or self.action == 'partial_update':
+            permission_classes = [IsLoggedInUserOrAdmin, IsOwner]
+        elif self.action == 'list':
+            permission_classes = [IsAdminUser]
+        elif self.action == 'destroy':
+            permission_classes = [IsLoggedInUserOrAdmin, IsOwner]
+        print(permission_classes)
+        return [permission() for permission in permission_classes]
 
 
 # class UserProfileViewSet(viewsets.ModelViewSet):
@@ -49,10 +44,10 @@ class GroupViewSet(viewsets.ModelViewSet):
 class ListCreateGroup(generics.ListCreateAPIView):
     serializer_class = GroupSerializer
     permission_classes = (permissions.IsAuthenticated,
-                          IsOwnerOr,)
+                          IsOwner,)
 
     def get_queryset(self):
-        group = Group.objects.filter(user_id=self.request.user.id, is_searchable=1)
+        group = Group.objects.all()
         return group
 
     def perform_create(self, serializer):
@@ -75,7 +70,7 @@ class RetrieveUpdateDestroyGroup(generics.RetrieveUpdateDestroyAPIView):
         )
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+                          IsOwner)
 
 
 class ListCreateMember(generics.ListCreateAPIView):
@@ -91,6 +86,8 @@ class ListCreateMember(generics.ListCreateAPIView):
         )
 
         serializer.save(group=group)
+
+    permission_classes = (IsGroupOwner,)
 
 
 class RetrieveUpdateDestroyMember(generics.RetrieveUpdateDestroyAPIView):
