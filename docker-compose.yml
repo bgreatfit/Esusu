@@ -48,6 +48,7 @@ services:
       container_name: ${PROJECT_NAME}-phpmyadmin
       environment:
           - PMA_HOST=cowrywise-mysql
+          -  COMPOSE_HTTP_TIMEOUT = 180
       restart: always
       ports:
              - 8083:80
