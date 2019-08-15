@@ -3,10 +3,9 @@ from . import views
 
 urlpatterns = [
     path('public/groups', views.ListCreateGroup.as_view(), name='group-list'),
+    path('groups/<slug:uid>/accept', views.RetrieveUpdateDestroyGroup.as_view(), name='group-detail'),
+    path('groups/<slug:uid>/join', views.RetrieveUpdateDestroyGroup.as_view(), name='group-detail'),
     path('groups', views.ListCreateGroup.as_view(), name='group-list'),
-    # path('users/<int:pk>/groups', views.ListCreateGroup.as_view(), name='group-list'),
-    # re_path('users/(?P<user_pk>\d+)/groups/(?P<pk>\d+)$',
-    #         views.RetrieveUpdateDestroyGroup.as_view(), name='group-detail'),
     path('groups/<slug:name>', views.RetrieveUpdateDestroyGroup.as_view(), name='group-detail'),
     path('groups/<slug:name>/members', views.ListCreateMember.as_view(), name='member-list'),
     path('groups/<slug:name>/members/<int:pk>', views.RetrieveUpdateDestroyMember.as_view(), name='member-detail'),

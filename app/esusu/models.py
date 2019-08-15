@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.utils.crypto import get_random_string
 
 # Create your models here.
 
@@ -41,7 +42,7 @@ class Group(models.Model):
     name = models.CharField(max_length=55, unique=True, blank=False)
     max_number = models.IntegerField()
     max_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    slot = models.CharField(max_length=255, null=True, blank=True)
+    share_link = models.CharField(max_length=15, unique=True, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -65,13 +66,11 @@ class Group(models.Model):
         return my_randoms
 
 
-# @receiver(post_save, sender=Group)
-# def create_member(sender, instance, created, **kwargs):
-#     print(f'Here Now {sender}, {instance}, {created}')
-#     if created:
-#         Member.objects.create(group=instance,
-#                               user_id=instance.user_id,
-#                               )
+@receiver(post_save, sender=Group)
+def create_share_link(sender, instance, created, **kwargs):
+    print(f'Here Now {sender}, {instance}, {created}')
+    if created:
+        instance.share_link = get_random_string(length=15)
 
 #signals.post_save.connect(receiver=create_customer, sender=Customer)
     # def save(self, *args, **kwargs):

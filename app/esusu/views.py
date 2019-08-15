@@ -2,13 +2,22 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, permissions, generics
 
 # Create your views here.
+from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
 from .models import User, Group, Member
 from .serializers import UserSerializer, GroupSerializer, MemberSerializer
 
 # Also add these imports
 from .permissions import IsLoggedInUserOrAdmin, IsAdminUser, IsOwnerOrReadOnly, IsAdmin, IsOwner, IsGroupOwner
+
+
+@api_view(['GET', 'POST'])
+def hello_world(request):
+    if request.method == 'POST':
+        return Response({"message": "Got some data!", "data": request.data})
+    return Response({"message": "Hello, world!"})
 
 
 class UserViewSet(viewsets.ModelViewSet):

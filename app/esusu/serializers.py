@@ -27,10 +27,11 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         extra_kwargs = {
             'members': {'read_only': True},
+            'share_link': {'read_only': True},
             'is_searchable': {'write_only': True},
         }
         model = Group
-        fields = ('id', 'description', 'max_number', 'max_amount', 'name', 'is_searchable', 'created_at', 'updated_at',
+        fields = ('id', 'description', 'max_number', 'max_amount', 'name', 'is_searchable','share_link', 'created_at', 'updated_at',
                   'members')
 
 
