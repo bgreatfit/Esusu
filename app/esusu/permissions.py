@@ -33,6 +33,7 @@ class IsOwner(permissions.BasePermission):
         # if request.method in permissions.SAFE_METHODS:
         #     return True
         #
+        print(request)
 
         # Write permissions are only allowed to the owner of the snippet.
         return str(obj) == str(request.user.email)
