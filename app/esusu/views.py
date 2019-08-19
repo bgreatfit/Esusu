@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from rest_framework import viewsets, permissions, generics
+from rest_framework import viewsets, permissions, generics, status
 
 # Create your views here.
-from rest_framework.decorators import api_view
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from .models import User, Group, Member
@@ -13,18 +13,56 @@ from .serializers import UserSerializer, GroupSerializer, MemberSerializer
 from .permissions import IsLoggedInUserOrAdmin, IsAdminUser, IsOwnerOrReadOnly, IsAdmin, IsOwner, IsGroupOwner
 
 
-@api_view(['GET', 'POST'])
-def hello_world(request):
-    if request.method == 'POST':
+@api_view(['GET'])
+def accept(request):
+    if request.method == 'GET':
         return Response({"message": "Got some data!", "data": request.data})
     return Response({"message": "Hello, world!"})
+
+
+@api_view(['GET'])
+def search(request):
+    if request.method == 'GET':
+        queryset = Group.objects.all().order_by('created_at')
+
+        print(type(queryset))
+        serializer = GroupSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def join(request, link):
+    if request.method == 'POST':
+        try:
+            group = Group.objects.get(share_link=link)
+        except Group.DoesNotExist:
+            return Response(data={"detail": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
+        data = request.data
+        contribution = float(data['contribution'])
+        member = group.members.all()
+        member_count = member.count()
+        if member.filter(user_id=request.user.id):
+            return Response({"detail": "You are already in this Group"})
+        if member_count == group.max_number:
+            return Response({"detail": "Maximum Group count reached"})
+        if contribution < group.max_amount:
+            return Response({"detail": "Contribution Amount Cannot be lower than Group Amount"})
+        elif contribution > group.max_amount:
+            return Response({"detail": "Contribution Amount Cannot be greater than Group Amount"})
+
+        serializer = MemberSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user_id=request.user.id)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    #Add this code block
+    # Add this code block
     def get_permissions(self):
         permission_classes = []
         if self.action == 'create':
@@ -44,10 +82,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-        # queryset = Group.objects.all()
-        # serializer_class = GroupSerializer
+    # queryset = Group.objects.all()
+    # serializer_class = GroupSerializer
 
-        pass
+    pass
 
 
 class ListCreateGroup(generics.ListCreateAPIView):
@@ -56,30 +94,26 @@ class ListCreateGroup(generics.ListCreateAPIView):
                           IsOwner,)
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            group = Group.objects.all()
-        else:
-            group = Group.objects.filter(user_id=self.request.user.id)
-        return group
+        return Group.objects.all()
 
     def perform_create(self, serializer):
         user = get_object_or_404(
             User, pk=self.request.user.id
         )
 
-        serializer.save(user=user,name=serializer.validated_data['name'])
+        serializer.save(user=user, name=serializer.validated_data['name'])
 
 
 class RetrieveUpdateDestroyGroup(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GroupSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-    lookup_field = 'name'
-    queryset = Group.objects.all()
+    permission_classes = (permissions.IsAuthenticated, IsGroupOwner)
+
+    def get_queryset(self):
+        queryset = Group.objects.filter(pk=self.kwargs.get('pk'))
+        return queryset
 
     def perform_update(self, serializer):
-        print(serializer.validated_data['name'])
-
-        serializer.save(name=serializer.validated_data['name'].lower())
+        serializer.save(user=self.request.user.id)
 
     # def get_object(self):
     #     queryset = self.filter_queryset(self.get_queryset())
@@ -91,7 +125,7 @@ class RetrieveUpdateDestroyGroup(generics.RetrieveUpdateDestroyAPIView):
 
 class ListCreateMember(generics.ListCreateAPIView):
     serializer_class = MemberSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    permission_classes = (permissions.IsAuthenticated,
                           IsGroupOwner)
 
     def get_queryset(self):
@@ -111,17 +145,18 @@ class RetrieveUpdateDestroyMember(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MemberSerializer
 
     def get_queryset(self):
+        print(self.request.data['group_id'])
         return get_object_or_404(
             Member,
-            group_id=self.kwargs.get('group_pk'),
+            group_id=self.request.data['group_id'],
             pk=self.kwargs.get('pk')
         )
 
     def get_object(self):
         return get_object_or_404(
-            self.get_queryset(),
-            group_id=self.kwargs.get['group_pk'],
-            pk=self.kwargs.get['pk']
+            Member,
+            group_id=self.request.data['group_id'],
+            pk=self.kwargs.get('pk')
 
         )
 

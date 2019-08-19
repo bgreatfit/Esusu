@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.utils.crypto import get_random_string
 
 # Create your models here.
@@ -37,12 +37,16 @@ class User(AbstractUser):
 
 class Group(models.Model):
     """ Model representing a book """
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='groups')
     description = models.TextField(max_length=1000, help_text='Enter a brief description of this group')
     name = models.CharField(max_length=55, unique=True, blank=False)
     max_number = models.IntegerField()
     max_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    share_link = models.CharField(max_length=15, unique=True, blank=True, null=True)
+
+    def create_link():
+        return get_random_string(length=15)
+
+    share_link = models.CharField(max_length=15, unique=True, blank=True, null=True, default=create_link)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -52,6 +56,10 @@ class Group(models.Model):
     )
     
     is_searchable = models.CharField(max_length=1, choices=IS_SEARCHABLE)
+    #
+    # class Meta:
+    #     def clean_name(self):
+    #         return self.cleaned_data["name"].upper()
 
     def __str__(self):
         return self.name
@@ -62,28 +70,34 @@ class Group(models.Model):
     def create_random_slot(self):
         total_slot = self.max_number
         my_randoms = random.sample(range(1, total_slot + 1), total_slot)
-        print(my_randoms)
         return my_randoms
 
 
-@receiver(post_save, sender=Group)
-def create_share_link(sender, instance, created, **kwargs):
-    print(f'Here Now {sender}, {instance}, {created}')
-    if created:
-        instance.share_link = get_random_string(length=15)
+@receiver(pre_save, sender=Group)
+def to_lower(sender, instance, *args, **kwargs):
+    if instance.name:
+        instance.name = instance.name.lower()
 
-#signals.post_save.connect(receiver=create_customer, sender=Customer)
-    # def save(self, *args, **kwargs):
-    #     print(self)
-    #     print(kwargs)
-    #     Member.objects.create(group=self.pk,
-    #                           user=self.user,
-    #                           )
-    #     super(Group, self).save(*args, **kwargs)
-    # def save(self, *args, **kwargs):
-    #     random_slot = self.create_random_slot()
-    #     self.slot = random_slot
-    #     super(Group, self).save(*args, **kwargs)
+
+@receiver(post_save, sender=Group)
+def group_instance(sender, instance, created, **kwargs):
+    if created:
+        Member.objects.create(group=instance, user=instance.user, contribution=instance.max_amount)
+
+
+
+# signals.post_save.connect(receiver=create_customer, sender=Customer)
+#     def save(self, *args, **kwargs):
+#         print(self)
+#         print(kwargs)
+#         Member.objects.create(group=self.pk,
+#                               user=self.user,
+#                               )
+#         super(Group, self).save(*args, **kwargs)
+#     def save(self, *args, **kwargs):
+#         random_slot = self.create_random_slot()
+#         self.slot = random_slot
+#         super(Group, self).save(*args, **kwargs)
 
 
 class Member(models.Model):
