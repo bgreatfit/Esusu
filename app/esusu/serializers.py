@@ -11,38 +11,34 @@ from .models import User, Group, Member
 
 
 class MemberSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = Member
         extra_kwargs = {'rank': {'write_only': True}}
-        fields = ('id', 'rank', 'contribution', 'created_at', 'updated_at')
+        fields = ('url', 'id', 'rank', 'contribution', 'owner', 'created_at', 'updated_at', 'group_id')
 
 
 class GroupSerializer(serializers.ModelSerializer):
     # members = serializers.HyperlinkedRelatedField(many=True, read_only=True,
     #                                               view_name='member-detail'
     #                                               )
-    members = MemberSerializer(many=True, read_only=True)
+    owner = serializers.ReadOnlyField(source='user.username')
+    #members = MemberSerializer(many=True, read_only=True)
+    members = serializers.HyperlinkedIdentityField(view_name='member-list')
 
     class Meta:
         extra_kwargs = {
             'members': {'read_only': True},
-            'share_link': {'read_only': True},
-            'is_searchable': {'write_only': True},
+            'share_link': {'read_only': True}
         }
         model = Group
-        fields = ('id', 'description', 'max_number', 'max_amount', 'name', 'is_searchable','share_link', 'created_at', 'updated_at',
-                  'members')
+        fields = ('id', 'description', 'max_number', 'max_amount', 'name', 'is_searchable', 'share_link', 'created_at', 'updated_at',
+                  'members', 'owner')
 
 
 class UserSerializer(serializers.ModelSerializer):
-    # profile = serializers.HyperlinkedRelatedField(many=True, required=True, view_name='esusu:user-detail',
-    #                                               queryset=UserProfile.objects.all())
-    groups = GroupSerializer(read_only=True)
-    # groups = serializers.HyperlinkedRelatedField(many=True,
-    #                                              queryset= Group.objects.all(),
-    #                                              view_name='group-detail'
-    #                                              )
+    groups = serializers.HyperlinkedRelatedField(many=True, view_name='group-detail', read_only=True)
 
     extra_kwargs = {'password': {'write_only': True},
                     'groups': {'read_only': True}
@@ -51,7 +47,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # fields = ('email', 'first_name', 'last_name', 'password', 'profile', 'groups')
-        fields = ('id',  'username', 'email', 'first_name', 'last_name', 'password', 'groups')
+        fields = ('url', 'id',  'username', 'email', 'first_name', 'last_name', 'password', 'groups')
 
     def create(self, validated_data):
         # profile_data = validated_data.pop('profile')

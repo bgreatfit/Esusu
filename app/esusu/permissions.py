@@ -65,10 +65,7 @@ class IsGroupOwner(permissions.BasePermission):
         # if request.method in permissions.SAFE_METHODS:
         #     return True
         #
-        print(obj.group.user_id)
-        print('here')
-        print(request)
 
         # Write permissions are only allowed to the owner of the snippet.
-        return int(obj.group.user_id) == int(request.user.id)
+        return int(obj.user_id) == int(request.user.id)
 
