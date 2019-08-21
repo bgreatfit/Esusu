@@ -100,7 +100,6 @@ class ListCreateGroup(generics.ListCreateAPIView):
         user = get_object_or_404(
             User, pk=self.request.user.id
         )
-
         serializer.save(user=user, name=serializer.validated_data['name'])
 
 
@@ -113,7 +112,10 @@ class RetrieveUpdateDestroyGroup(generics.RetrieveUpdateDestroyAPIView):
         return queryset
 
     def perform_update(self, serializer):
-        serializer.save(user=self.request.user.id)
+        user = get_object_or_404(
+            User, pk=self.request.user.id
+        )
+        serializer.save(user=user)
 
     # def get_object(self):
     #     queryset = self.filter_queryset(self.get_queryset())
@@ -129,12 +131,14 @@ class ListCreateMember(generics.ListCreateAPIView):
                           IsGroupOwner)
 
     def get_queryset(self):
-        member = Member.objects.filter(group_id=self.kwargs.get('group_pk'))
+        print("heeee")
+        member = Member.objects.filter(pk=4)
+        print(member)
         return member
 
     def perform_create(self, serializer):
         group = get_object_or_404(
-            Group, pk=self.kwargs.get('group_pk')
+            Group, pk=self.kwargs.get('pk')
         )
 
         serializer.save(group=group)
