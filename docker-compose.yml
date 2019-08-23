@@ -4,7 +4,7 @@
 #            'default': {
 #                'ENGINE': 'django.db.backends.mysql',
 #                'HOST': 'mysql',
-#                ...
+#                {   ...
 #            }
 #        }
 #
@@ -28,7 +28,7 @@ services:
         - ./app:/app
         - static_volume:/app/static
       expose:
-         - 8001
+         - 8000
       depends_on:
         - mysql
 

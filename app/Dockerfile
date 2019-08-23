@@ -27,10 +27,11 @@ RUN pip install -r requirements.txt
 
 # copy entrypoint.sh
 
-
+EXPOSE 8000
 # copy project
 COPY . /app/
 # run entrypoint.sh
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+#CMD ["sh","/entrypoint.sh"]
