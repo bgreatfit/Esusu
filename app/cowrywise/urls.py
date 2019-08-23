@@ -23,10 +23,10 @@ from esusu.views import GroupViewSet
 
 urlpatterns = [
     # Your URLs...
-    path('api/token', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/v1/token', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/v1/token/refresh', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]
-router = DefaultRouter()
+router = DefaultRouter(trailing_slash=False)
 router.register(r'users', UserViewSet)
 # router.register(r'profiles', UserProfileViewSet)
 urlpatterns += [
