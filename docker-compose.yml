@@ -26,9 +26,9 @@ services:
        - .env
       volumes:
         - ./app:/app
-        - static_volume:/app/static
+        - static_volume:/static
       expose:
-         - 8001
+         - 8000
       depends_on:
         - mysql
 
@@ -58,9 +58,9 @@ services:
       build: ./nginx
       container_name: ${PROJECT_NAME}-nginx
       volumes:
-           - static_volume:/app/static
+           - static_volume:/static
       ports:
-           - 1338:8080
+           - 8000:8080
       depends_on:
           - django
 

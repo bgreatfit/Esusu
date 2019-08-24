@@ -2,27 +2,19 @@ sudo: required
 language: generic
 services:
 - docker
-env:
-  global:
-    - DB_HOST=mysql
-    - DB_NAME=docker_django_db
-    - DB_PWD=dbpw
-    - DB_USER=dbuser
-    - DJANGO_SECRET_KEY=1234567890
-    - PROJECT_NAME=docker_django
-    - DJANGO_SECRET_KEY='1234567890'
 before_install:
 - docker-compose up -d
 script:
 - echo $DJANGO_SECRET_KEY
+- echo "DONE"
 #- docker-compose exec django python manage.py test
 deploy:
   provider: elasticbeanstalk
   region: "us-east-2"
   app: "docker-django"
-  env: "DockerDjango-env"
+  env: "Cowrywisev2-env"
   bucket_name: "elasticbeanstalk-us-east-2-745020165956"
-  bucket_path: "docker-django"
+  bucket_path: "Cowrywisev2"
   on:
     branch: master
   access_key_id: $AWS_ACCESS_KEY

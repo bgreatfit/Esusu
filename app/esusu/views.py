@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, permissions, generics, status
 
@@ -11,6 +12,10 @@ from .serializers import UserSerializer, GroupSerializer, MemberSerializer
 
 # Also add these imports
 from .permissions import IsLoggedInUserOrAdmin, IsAdminUser, IsOwnerOrReadOnly, IsAdmin, IsOwner, IsGroupOwner
+
+
+def welcome(request):
+    return HttpResponse('Welcome')
 
 
 @api_view(['GET'])
@@ -131,38 +136,31 @@ class ListCreateMember(generics.ListCreateAPIView):
                           IsGroupOwner)
 
     def get_queryset(self):
-        print("heeee")
-        member = Member.objects.filter(pk=4)
-        print(member)
+        member = Member.objects.filter(group_id=self.kwargs.get('group_pk'))
         return member
 
     def perform_create(self, serializer):
         group = get_object_or_404(
-            Group, pk=self.kwargs.get('pk')
+            Group, pk=self.kwargs.get('group_pk')
         )
 
         serializer.save(group=group)
 
 
 class RetrieveUpdateDestroyMember(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Member.objects.all()
     serializer_class = MemberSerializer
-
-    def get_queryset(self):
-        print(self.request.data['group_id'])
-        return get_object_or_404(
-            Member,
-            group_id=self.request.data['group_id'],
-            pk=self.kwargs.get('pk')
-        )
-
-    def get_object(self):
-        return get_object_or_404(
-            Member,
-            group_id=self.request.data['group_id'],
-            pk=self.kwargs.get('pk')
-
-        )
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
+
+    def get_queryset(self):
+        print(self.kwargs.get('group_pk'))
+        print(self.kwargs.get('pk'))
+
+        return get_object_or_404(
+            Member,
+            group_id=self.kwargs.get('group_pk'),
+            pk=self.kwargs.get('pk')
+        )
+
+
