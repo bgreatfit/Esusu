@@ -22,8 +22,8 @@ services:
       build: app
       container_name: ${PROJECT_NAME}-django
       command: .entrypoint.sh
-#      env_file:
-#       - .env
+      env_file:
+       - .env
       volumes:
         - ./app:/app
         - static_volume:/static
@@ -48,7 +48,7 @@ services:
       container_name: ${PROJECT_NAME}-phpmyadmin
       environment:
           - PMA_HOST=cowrywise-mysql
-          -  COMPOSE_HTTP_TIMEOUT = 180
+          -  COMPOSE_HTTP_TIMEOUT=180
       restart: always
       ports:
              - 8083:80
@@ -61,7 +61,7 @@ services:
       volumes:
            - static_volume:/static
       ports:
-           - 8000:8080
+           - 8000:8000
       depends_on:
           - django
 

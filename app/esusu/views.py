@@ -13,9 +13,12 @@ from .serializers import UserSerializer, GroupSerializer, MemberSerializer
 # Also add these imports
 from .permissions import IsLoggedInUserOrAdmin, IsAdminUser, IsOwnerOrReadOnly, IsAdmin, IsOwner, IsGroupOwner
 
+from django.conf import settings
+
 
 def welcome(request):
-    return HttpResponse('Welcome')
+    print(  settings.DATABASES)
+    return HttpResponse('HAte')
 
 
 @api_view(['GET'])
