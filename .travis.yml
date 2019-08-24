@@ -11,7 +11,7 @@ script:
 deploy:
   provider: elasticbeanstalk
   region: "us-east-2"
-  app: "docker-django"
+  app: "Cowrywisev2"
   env: "Cowrywisev2-env"
   bucket_name: "elasticbeanstalk-us-east-2-745020165956"
   bucket_path: "Cowrywisev2"
