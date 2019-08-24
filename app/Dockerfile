@@ -26,11 +26,17 @@ RUN pip install -r requirements.txt
 # copy project
 
 # copy entrypoint.sh
+<<<<<<< HEAD
 EXPOSE 8000
 
+=======
+
+EXPOSE 8000
+>>>>>>> 92d9f6f210b96b6222e0329c4e0868d30adeb994
 # copy project
 COPY . /app/
 # run entrypoint.sh
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+#CMD ["sh","/entrypoint.sh"]
