@@ -27,6 +27,7 @@ urlpatterns = [
     # Your URLs...
     path('me', views.welcome, name='welcome'),
     path('mean', views.welcome, name='welcome'),
+    path('today', views.welcome, name='welcome'),
     path('new', views.welcome, name='welcome'),
     path('api/v1/token', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/token/refresh', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
