@@ -11,8 +11,8 @@
  ],
  "Volumes": [
   {
-    "HostDirectory": "/srv",
-    "ContainerDirectory": "/srv"
+    "HostDirectory": "/app",
+    "ContainerDirectory": "/app"
   }
 ]
 }

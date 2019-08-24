@@ -27,7 +27,7 @@ urlpatterns = [
     # Your URLs...
     path('me', views.welcome, name='welcome'),
     path('mean', views.welcome, name='welcome'),
-    path('men', views.welcome, name='welcome'),
+    path('new', views.welcome, name='welcome'),
     path('api/v1/token', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/token/refresh', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]
@@ -38,7 +38,7 @@ urlpatterns += [
     path('admin/', admin.site.urls),
 ]
 urlpatterns += [
-    path(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 urlpatterns += [
         re_path('api/v1/', include('esusu.urls')),

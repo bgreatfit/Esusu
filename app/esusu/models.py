@@ -37,7 +37,7 @@ class User(AbstractUser):
 
 class Group(models.Model):
     """ Model representing a book """
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='groups')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     description = models.TextField(max_length=1000, help_text='Enter a brief description of this group')
     name = models.CharField(max_length=55, unique=True, blank=False)
     max_number = models.IntegerField()
