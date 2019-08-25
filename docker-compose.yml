@@ -22,8 +22,8 @@ services:
       build: .
       container_name: ${PROJECT_NAME}-django
       command: .entrypoint.sh
-      env_file:
-       - .env
+#      env_file:
+#       - .env
       volumes:
         - ./app:/app
         - static:/srv
