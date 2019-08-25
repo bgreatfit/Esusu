@@ -19,10 +19,10 @@ You can access your application via **`127.0.0.1:8000`**, if you're running the 
 
 ## Hosts within your environment
 
-View get access to phpmyadmin using **`127.0.0.1:8000:8083`**
+View get access to phpmyadmin using **`127.0.0.1:8083`**
 
 username: **`root`**
-username: **`root`**
+password: **`root`**
 
 Service|Hostname |Port number
 -------|---------|-----------
