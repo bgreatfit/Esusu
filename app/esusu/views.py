@@ -17,7 +17,6 @@ from django.conf import settings
 
 
 def welcome(request):
-    print(  settings.DATABASES)
     return HttpResponse('HAte')
 
 
