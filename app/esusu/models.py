@@ -41,7 +41,7 @@ class Group(models.Model):
     description = models.TextField(max_length=1000, help_text='Enter a brief description of this group')
     name = models.CharField(max_length=55, unique=True, blank=False)
     max_number = models.IntegerField()
-    max_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    max_amount = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=True)
 
     def create_link():
         return get_random_string(length=15)

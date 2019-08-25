@@ -19,14 +19,14 @@ version: "3.1"
 services:
 
     django:
-      build: app
+      build: .
       container_name: ${PROJECT_NAME}-django
       command: .entrypoint.sh
-#      env_file:
-#       - .env
+      env_file:
+       - .env
       volumes:
         - ./app:/app
-        - static_volume:/static
+        - static:/srv
       expose:
          - 8000
       depends_on:
@@ -59,7 +59,7 @@ services:
       build: ./nginx
       container_name: ${PROJECT_NAME}-nginx
       volumes:
-           - static_volume:/static
+           - static:/srv:ro
       ports:
            - 8000:8000
       depends_on:
@@ -68,5 +68,5 @@ services:
 
 volumes:
   mysql-data:
-  static_volume:
+  static:
 

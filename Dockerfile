@@ -12,7 +12,7 @@ RUN apt-get update \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 # install dependencies
-COPY requirements.txt /app/
+COPY /app/requirements.txt /app/
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
@@ -29,9 +29,9 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8000
 # copy project
-COPY . /app/
+COPY /app/ /app/
 # run entrypoint.sh
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY /app/entrypoint.sh /entrypoint.sh
+#RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 #CMD ["sh","/entrypoint.sh"]
