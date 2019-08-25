@@ -9,7 +9,8 @@ script:
 - echo "DONE"
 #- docker-compose exec django python manage.py test
 deploy:
-  provider: elasticbeanstalk  region: "us-east-2"
+  provider: elasticbeanstalk
+  region: "us-east-2"
   app: "Cowrywisev2"
   env: "Cowrywisev2-env"
   bucket_name: "elasticbeanstalk-us-east-2-745020165956"
