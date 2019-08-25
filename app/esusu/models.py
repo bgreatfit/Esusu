@@ -85,29 +85,11 @@ def group_instance(sender, instance, created, **kwargs):
         Member.objects.create(group=instance, user=instance.user, contribution=instance.max_amount)
 
 
-
-# signals.post_save.connect(receiver=create_customer, sender=Customer)
-#     def save(self, *args, **kwargs):
-#         print(self)
-#         print(kwargs)
-#         Member.objects.create(group=self.pk,
-#                               user=self.user,
-#                               )
-#         super(Group, self).save(*args, **kwargs)
-#     def save(self, *args, **kwargs):
-#         random_slot = self.create_random_slot()
-#         self.slot = random_slot
-#         super(Group, self).save(*args, **kwargs)
-
-
 class Member(models.Model):
-    """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
-    # id = models.UUIDField(primary_key=True, default=uuid.uuid4,
-    #                       help_text="Unique ID for this particular book across whole library")
     group = models.ForeignKey(Group, related_name='members', on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="members")
     rank = models.IntegerField(null=True, blank=True)
-    contribution = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    contribution = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

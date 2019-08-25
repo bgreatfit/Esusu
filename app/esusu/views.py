@@ -17,7 +17,7 @@ from django.conf import settings
 
 
 def welcome(request):
-    return HttpResponse('HAte')
+    return HttpResponse('WELCOME')
 
 
 @api_view(['GET'])
@@ -31,10 +31,8 @@ def accept(request):
 def search(request):
     if request.method == 'GET':
         queryset = Group.objects.all().order_by('created_at')
-
-        print(type(queryset))
         serializer = GroupSerializer(queryset, many=True, context={'request': request})
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -45,21 +43,21 @@ def join(request, link):
             group = Group.objects.get(share_link=link)
         except Group.DoesNotExist:
             return Response(data={"detail": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
-        data = request.data
-        contribution = float(data['contribution'])
-        member = group.members.all()
-        member_count = member.count()
-        if member.filter(user_id=request.user.id):
-            return Response({"detail": "You are already in this Group"})
-        if member_count == group.max_number:
-            return Response({"detail": "Maximum Group count reached"})
-        if contribution < group.max_amount:
-            return Response({"detail": "Contribution Amount Cannot be lower than Group Amount"})
-        elif contribution > group.max_amount:
-            return Response({"detail": "Contribution Amount Cannot be greater than Group Amount"})
-
         serializer = MemberSerializer(data=request.data)
+
         if serializer.is_valid():
+            data = request.data
+            contribution = float(data['contribution'])
+            member = group.members.all()
+            member_count = member.count()
+            if member.filter(user_id=request.user.id):
+                return Response({"detail": "You are already in this Group"})
+            if member_count == group.max_number:
+                return Response({"detail": "Maximum Group count reached"})
+            if contribution < group.max_amount:
+                return Response({"detail": "Contribution Amount Cannot be lower than Group Amount"})
+            elif contribution > group.max_amount:
+                return Response({"detail": "Contribution Amount Cannot be greater than Group Amount"})
             serializer.save(user_id=request.user.id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -156,13 +154,13 @@ class RetrieveUpdateDestroyMember(generics.RetrieveUpdateDestroyAPIView):
                           IsOwnerOrReadOnly,)
 
     def get_queryset(self):
-        print(self.kwargs.get('group_pk'))
-        print(self.kwargs.get('pk'))
 
         return get_object_or_404(
             Member,
             group_id=self.kwargs.get('group_pk'),
             pk=self.kwargs.get('pk')
         )
+
+
 
 

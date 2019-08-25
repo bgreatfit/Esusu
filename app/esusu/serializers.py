@@ -16,7 +16,7 @@ class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
         extra_kwargs = {'rank': {'write_only': True}}
-        fields = ('id', 'rank', 'contribution', 'owner', 'created_at', 'updated_at', 'group_id')
+        fields = ('id', 'rank', 'contribution', 'owner', 'created_at', 'updated_at')
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -24,8 +24,8 @@ class GroupSerializer(serializers.ModelSerializer):
     #                                               view_name='member-detail'
     #                                               )
     owner = serializers.ReadOnlyField(source='user.username')
-    #members = MemberSerializer(many=True, read_only=True)
-   # members = serializers.HyperlinkedIdentityField(view_name='member-list')
+    members = MemberSerializer(many=True, read_only=True)
+    #members = serializers.HyperlinkedIdentityField(view_name='member-list')
 
     class Meta:
         extra_kwargs = {
@@ -41,7 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
     groups = serializers.HyperlinkedRelatedField(many=True, view_name='group-detail', read_only=True)
 
     extra_kwargs = {'password': {'write_only': True},
-                    'groups': {'read_only': True}
+                    'groups': {'read_only': True},
                     }
 
     class Meta:
