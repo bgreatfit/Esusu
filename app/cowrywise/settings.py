@@ -140,7 +140,6 @@ USE_TZ = True
 STATIC_ROOT = "/srv/static/"
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = '/api/v1/users'
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
