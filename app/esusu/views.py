@@ -17,7 +17,7 @@ from django.conf import settings
 
 
 def welcome(request):
-    return HttpResponse('WELCOME')
+    return HttpResponse('STAY BLESSED')
 
 
 @api_view(['GET'])
