@@ -1,4 +1,4 @@
-FROM python:3.7.4
+FROM python:3.6
 # set environment varibles
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -31,7 +31,7 @@ EXPOSE 8000
 # copy project
 COPY /app/ /app/
 # run entrypoint.sh
-COPY /app/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY app/entrypoint.sh /entrypoint.sh
+#RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 #CMD ["sh","/entrypoint.sh"]

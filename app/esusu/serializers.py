@@ -41,7 +41,6 @@ class UserSerializer(serializers.ModelSerializer):
     groups = serializers.HyperlinkedRelatedField(many=True, view_name='group-detail', read_only=True)
 
     extra_kwargs = {'password': {'write_only': True},
-                    'groups': {'read_only': True},
                     }
 
     class Meta:

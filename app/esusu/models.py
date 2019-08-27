@@ -1,6 +1,7 @@
 import uuid
 import random
 
+from django.contrib.auth import signals
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
@@ -9,19 +10,34 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
 from django.utils.crypto import get_random_string
+from django.core.mail import send_mail
+from .tasks import send_verification_email
+from rest_framework.reverse import reverse
+
 
 # Create your models here.
 
 
 class User(AbstractUser):
-    username = models.CharField(max_length=50, help_text="enter username", unique=True)
+    username = models.CharField(max_length=50, help_text="enter username")
     email = models.EmailField(_('email address'), unique=True)
+    is_verified = models.BooleanField('verified', default=False)  # Add the `is_verified` flag
+    verification_uuid = models.UUIDField('Unique Verification UUID', default=uuid.uuid4)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
     def __str__(self):
         return f'{self.email}'
+
+
+def user_post_save(sender, instance, signal, *args, **kwargs):
+    if not instance.is_verified:
+        # Send verification email
+        send_verification_email.delay(instance.pk)
+
+
+post_save.connect(user_post_save, sender=User)
 
 
 # class UserProfile(models.Model):

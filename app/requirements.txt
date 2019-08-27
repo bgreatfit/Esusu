@@ -12,3 +12,5 @@ djangorestframework
 django-rest-auth
 Pillow
 djangorestframework_simplejwt
+celery==4.3.0
+redis==3.2.1

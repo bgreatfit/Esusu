@@ -7,7 +7,10 @@ echo "Collect static files"
 ##
 python manage.py migrate
 #
-python manage.py collectstatic
+python manage.py collectstatic --noinput
+#$ celery worker -A cowrywise --loglevel=debug --concurrency=4
+#celery -A cowrywise worker
+#celery -A cowrywise beat
 ## Start server
 echo "Starting server"
 #

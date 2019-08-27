@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, permissions, generics, status
 
 # Create your views here.
@@ -20,6 +21,18 @@ def welcome(request):
     return HttpResponse('WELCOME')
 
 
+@api_view(['POST'])
+@csrf_exempt
+def verify(request, uuid):
+    try:
+        user = User.objects.get(verification_uuid=uuid, is_verified=False)
+    except User.DoesNotExist:
+        return Response({"detail": "User does not exist or is already verified", "data": request.data})
+    user.is_verified = True
+    user.save()
+    return Response(data={"detail": "done"}, status=status.HTTP_201_CREATED)
+
+
 @api_view(['GET'])
 def accept(request):
     if request.method == 'GET':
@@ -33,7 +46,6 @@ def search(request):
         queryset = Group.objects.all().order_by('created_at')
         serializer = GroupSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

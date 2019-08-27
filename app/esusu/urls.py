@@ -2,6 +2,8 @@ from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
+
+    path(r'^verify/(?P<uuid>[a-z0-9\-]+)/', views.verify, name='verify'),
     path('groups/search', views.search, name='group-list'),
     path('groups/<str:link>/join', views.join, name='group-join'),
     path('groups', views.ListCreateGroup.as_view(), name='group-list'),
