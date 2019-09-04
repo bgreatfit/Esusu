@@ -16,21 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path, include
 from rest_framework.routers import SimpleRouter,DefaultRouter
-from esusu.views import UserViewSet
-from esusu import views
 from rest_framework_simplejwt import views as jwt_views
 
-from esusu.views import GroupViewSet
+from esusu.views import welcome, UserViewSet, GroupViewSet, TransactionViewSet, AccountViewSet
 
 
 urlpatterns = [
     # Your URLs...
-    path('', views.welcome, name='welcome'),
+    path('',welcome, name='welcome'),
     path('api/v1/token', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/token/refresh', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]
 router = DefaultRouter(trailing_slash=False)
 router.register(r'users', UserViewSet)
+router.register(r'accounts', AccountViewSet)
+router.register(r'transactions', TransactionViewSet)
 # router.register(r'profiles', UserProfileViewSet)
 urlpatterns += [
     path('admin/', admin.site.urls),

@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from .models import User, Group, Member
+from .models import User, Group, Member, Account, Transaction
+
+
 #
 #
 # class UserProfileSerializer(serializers.ModelSerializer):
@@ -40,13 +42,12 @@ class GroupSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     groups = serializers.HyperlinkedRelatedField(many=True, view_name='group-detail', read_only=True)
 
-    extra_kwargs = {'password': {'write_only': True},
-                    }
-
     class Meta:
         model = User
+        extra_kwargs = {'password': {'write_only': True}}
+
         # fields = ('email', 'first_name', 'last_name', 'password', 'profile', 'groups')
-        fields = ('url', 'id',  'username', 'email', 'first_name', 'last_name', 'password', 'groups')
+        fields = ('url', 'id',  'username', 'email', 'first_name', 'last_name', 'password','pay_freq','groups')
 
     def create(self, validated_data):
         # profile_data = validated_data.pop('profile')
@@ -94,3 +95,16 @@ class CustomerHyperlink(serializers.HyperlinkedRelatedField):
            'pk': view_kwargs['customer_pk']
         }
         return self.get_queryset().get(**lookup_kwargs)
+
+
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = '__all__'
+
+
+class TransactionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Transaction
+        fields = '__all__'

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Member, Group
+from .models import User, Member, Group, Account, Transaction
 
 
 # Register your models here.
@@ -14,7 +14,6 @@ from .models import User, Member, Group
 
 class GroupInline(admin.StackedInline):
     model = Group
-
 
 
 @admin.register(User)
@@ -45,3 +44,6 @@ class MemberAdmin(admin.ModelAdmin):
     list_select_related = ('group',)
     list_filter = ('created_at', 'rank')
 
+
+admin.site.register(Account)
+admin.site.register(Transaction)

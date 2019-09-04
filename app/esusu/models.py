@@ -23,6 +23,9 @@ class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     is_verified = models.BooleanField('verified', default=False)  # Add the `is_verified` flag
     verification_uuid = models.UUIDField('Unique Verification UUID', default=uuid.uuid4)
+    pay_freq = models.CharField('Payment Frequency', max_length=1, default='D')
+    contribution = models.DecimalField(max_digits=10, decimal_places=2, default=10000)
+
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
@@ -31,7 +34,10 @@ class User(AbstractUser):
         return f'{self.email}'
 
 
-def user_post_save(sender, instance, signal, *args, **kwargs):
+
+def user_post_save(sender, instance, created, *args, **kwargs):
+    if created:
+        Account.objects.create(user=instance)
     if not instance.is_verified:
         # Send verification email
         send_verification_email.delay(instance.pk)
@@ -108,5 +114,30 @@ class Member(models.Model):
     contribution = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Account(models.Model):
+    user = models.ForeignKey(User, related_name='accounts', on_delete=models.CASCADE, null=False)
+    account_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
+                                      help_text="User's Account Number")
+    balance = models.DecimalField(max_digits=14, decimal_places=2, default=500000, blank=False, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Transaction(models.Model):
+    trans_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
+                                help_text="User's Account Number")
+    account_id = models.ForeignKey(Account, related_name='transactions', on_delete=models.SET_NULL, null=True)
+    amount = models.DecimalField(max_digits=14, decimal_places=2)
+    #trans_class = models.CharField(max_digits=14)
+    def generate_reference():
+        return 'REF'.get_random_string(length=5)
+    receipt_no = models.CharField(max_length=15, default=generate_reference)
+    trans_type = models.CharField(max_length=15, default='test')
+    trans_date = models.DateTimeField(auto_now_add=True)
+    response = models.TextField(max_length=100, default='Sucess')
+
+
 
 

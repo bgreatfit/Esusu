@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '^3#le3&a@5ir6t^v3-38k2(r=6x9(a8(ohg$^&grvirxvm)!t#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'esusu.apps.EsusuConfig',
     'rest_framework_simplejwt',
+    'django_celery_beat',
 
 ]
 AUTH_USER_MODEL = 'esusu.User'

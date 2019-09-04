@@ -8,8 +8,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from .models import User, Group, Member
-from .serializers import UserSerializer, GroupSerializer, MemberSerializer
+from .models import User, Group, Member, Transaction, Account
+from .serializers import UserSerializer, GroupSerializer, MemberSerializer, TransactionSerializer, AccountSerializer
 
 # Also add these imports
 from .permissions import IsLoggedInUserOrAdmin, IsAdminUser, IsOwnerOrReadOnly, IsAdmin, IsOwner, IsGroupOwner
@@ -173,6 +173,17 @@ class RetrieveUpdateDestroyMember(generics.RetrieveUpdateDestroyAPIView):
             pk=self.kwargs.get('pk')
         )
 
+
+class AccountViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+
+
+class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    #                       IsOwnerOrReadOnly,)
 
 
 
