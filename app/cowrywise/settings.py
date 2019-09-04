@@ -170,5 +170,14 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'esusu.tasks.hello',
         'schedule': 10,  # execute every minute
         #'schedule': crontab()  # execute every minute
-    }
+    },
+    'task-saving-money': {
+        'task': 'esusu.tasks.save_money',
+        'schedule': crontab(),
+    },
+    # 'task-number-two': {
+    #     'task': 'app2.tasks.task_number_two',
+    #     'schedule': crontab(minute=0, hour='*/3,10-19'),
+    #     'args': (*args)
+    # }
 }

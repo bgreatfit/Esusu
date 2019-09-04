@@ -10,11 +10,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='group',
-            name='slug',
-            field=models.CharField(max_length=255, null=True, unique=True),
-        ),
+        # migrations.AddField(
+        #     model_name='group',
+        #     name='slug',
+        #     field=models.CharField(max_length=255, null=True, unique=True),
+        # ),
         migrations.AlterField(
             model_name='group',
             name='amount',

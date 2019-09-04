@@ -116,6 +116,26 @@ class Member(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class SavingPreference(models.Model):
+    user = models.OneToOneField(User, related_name='savingspref', on_delete=models.CASCADE, null=False)
+    periodic_amount = models.DecimalField(max_digits=14, decimal_places=2, default=500000, blank=False, null=False)
+    FREQUENCY = (
+        ('D', 'Daily'),
+        ('W', 'Weekly'),
+        ('M', 'Monthly')
+    )
+    frequency = models.CharField('Frequency', max_length=1, choices=FREQUENCY)
+    STATUS = (
+        ('1', 'Active'),
+        ('0', 'Paused')
+    )
+    status = models.CharField('Status', max_length= 1, choices=STATUS)
+    day_of_month = models.IntegerField('Month', blank=False, null=True)
+    time = models.TimeField('Time')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 class Account(models.Model):
     user = models.ForeignKey(User, related_name='accounts', on_delete=models.CASCADE, null=False)
     account_id = models.UUIDField(primary_key=True, default=uuid.uuid4,

@@ -1,5 +1,5 @@
 import logging
-
+import datetime
 from celery.schedules import crontab
 from django.template import Template, Context
 from django.urls import reverse
@@ -9,30 +9,40 @@ from celery import shared_task
 from cowrywise.celery import app
 from .models import *
 
+
 #
 # # from esusu.models import Account, Transaction
 
 
 @shared_task
 def hello():
-    print("Hello there!")
+    print("Hello !")
+    print("Hello Mike!")
+
+
 # #
 # #
 @shared_task
 def save_money():
-    UserModel = get_user_model()
+    now = datetime.datetime.now()
+    # now.year, now.month, now.day, now.hour, now.minute, now.second
+    print(now)
+    print('here')
+    user_model = get_user_model()
 
-    users = UserModel.objects.all()
+    users = user_model.objects.all()
     for user in users:
         try:
-            account = Account.objects.get(user_id=user.id)
-            account.amount -= user.contribution
-            account.save()
+            if user.savingspref:
+                if user.savingspref.day_of_month == now.day and user.savingspref.time == now.hour \
+                        and user.savingspref.status == '1':
+                    account = Account.objects.get(user_id=user.id)
+                    account.amount -= user.savingspref.periodic_amount
+                    account.save()
 
-            Transaction.objects.create(amount=user.contribution)
+                    Transaction.objects.create(amount=user.contribution)
         except user.DoesNotExist:
-            pass
-            logging.warning("Tried to send withdraw '%d' from user '%s'" % user.contribution,user.email)
+            logging.warning("Tried to send withdraw '%d' from user '%s'" % user.contribution, user.email)
 
 
 #
