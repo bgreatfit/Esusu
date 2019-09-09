@@ -15,7 +15,10 @@ from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from datetime import timedelta
-
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -129,8 +132,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Africa/Lagos'
+TIME_INPUT_FORMATS = ('%I:%M %p',)
 USE_I18N = True
 
 USE_L10N = True
@@ -164,6 +167,7 @@ CELERY_RESULT_BACKEND = 'redis://redis:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = "Africa/Lagos"
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_BEAT_SCHEDULE = {
     'hello': {
@@ -171,13 +175,15 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 10,  # execute every minute
         #'schedule': crontab()  # execute every minute
     },
-    'task-saving-money': {
-        'task': 'esusu.tasks.save_money',
-        'schedule': crontab(),
-    },
     # 'task-number-two': {
     #     'task': 'app2.tasks.task_number_two',
     #     'schedule': crontab(minute=0, hour='*/3,10-19'),
     #     'args': (*args)
     # }
 }
+
+
+sentry_sdk.init(
+    dsn="https://a8cc25000f654f7d96f63b5d16eacb19@sentry.io/1578830",
+    integrations=[DjangoIntegration(), CeleryIntegration(), RedisIntegration()]
+)
