@@ -83,6 +83,10 @@ WSGI_APPLICATION = 'cowrywise.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+RDS_HOSTNAME = None
+if 'RDS_HOSTNAME' in os.environ:
+    RDS_HOSTNAME = True
+    print('Horray')
 if 'RDS_HOSTNAME' in os.environ:
     DATABASES = {
         'default': {
@@ -162,8 +166,9 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 
 }
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
+
+CELERY_BROKER_URL = 'redis://redis:6379' if 'RDS_HOSTNAME' in os.environ else 'redis.doit4m.ng.0001.use2.cache.amazonaws.com:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379' if 'RDS_HOSTNAME' in os.environ else 'redis.doit4m.ng.0001.use2.cache.amazonaws.com:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
