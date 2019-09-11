@@ -11,7 +11,7 @@ script:
 deploy:
   provider: elasticbeanstalk
   region: "us-east-2"
-  app: "EsusuV1"
+  app: "Esusu-v1"
   env: "EsusuV1-env"
   bucket_name: "elasticbeanstalk-us-east-2-745020165956"
   bucket_path: "EsusuV1-env"
