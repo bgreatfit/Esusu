@@ -11,10 +11,10 @@ script:
 deploy:
   provider: elasticbeanstalk
   region: "us-east-2"
-  app: "Cowrywisev2"
+  app: "EsusuV1-env"
   env: "Cowrywisev2-env"
   bucket_name: "elasticbeanstalk-us-east-2-745020165956"
-  bucket_path: "Cowrywisev2"
+  bucket_path: "EsusuV1-env"
   on:
     branch: master
   access_key_id: $AWS_ACCESS_KEY
