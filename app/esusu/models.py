@@ -11,7 +11,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
-from .tasks import send_verification_email
+#from .tasks import send_verification_email
 from rest_framework.reverse import reverse
 
 
@@ -39,8 +39,9 @@ def user_post_save(sender, instance, created, *args, **kwargs):
     if created:
         Account.objects.create(user=instance)
     if not instance.is_verified:
+        pass
         # Send verification email
-        send_verification_email.delay(instance.pk)
+       # send_verification_email.delay(instance.pk)
 
 
 post_save.connect(user_post_save, sender=User)

@@ -173,7 +173,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     'task-saving-money': {
         'task': 'esusu.tasks.save_money',
-        'schedule': crontab(),
+        'schedule': 10,
     },
     # 'task-number-two': {
     #     'task': 'app2.tasks.task_number_two',

@@ -18,7 +18,7 @@ from django.conf import settings
 
 
 def welcome(request):
-    return HttpResponse('My HOMMIE')
+    return HttpResponse('My GUY')
 
 
 @api_view(['POST'])
