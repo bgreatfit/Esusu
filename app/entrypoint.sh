@@ -7,7 +7,7 @@ echo "Collect static files"
 ##
 python manage.py migrate
 #
-python manage.py collectstatic --noinput
+python manage.py collectstatic
 #$ celery worker -A cowrywise --loglevel=debug --concurrency=4
 #celery -A cowrywise worker
 #celery -A cowrywise beat
