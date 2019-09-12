@@ -11,7 +11,9 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
-#from .tasks import send_verification_email
+
+
+
 from rest_framework.reverse import reverse
 
 
@@ -39,7 +41,7 @@ def user_post_save(sender, instance, created, *args, **kwargs):
     if created:
         Account.objects.create(user=instance)
     if not instance.is_verified:
-        pass
+        from .tasks import send_verification_email
         # Send verification email
        # send_verification_email.delay(instance.pk)
 
@@ -131,15 +133,27 @@ class SavingPreference(models.Model):
         ('0', 'Paused')
     )
     status = models.CharField('Status', max_length= 1, choices=STATUS)
-    day_of_month = models.IntegerField('Month', blank=False, null=True)
+    day_of_month = models.IntegerField('Day', blank=False, null=True)
     time = models.TimeField('Time')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class SaveMoneyLog(models.Model):
+    user = models.ForeignKey(User, related_name='save_logs', on_delete=models.CASCADE, null=False)
+    time = models.TimeField('time')
+    STATUS = (
+        ('1', 'YES'),
+        ('0', 'NO')
+    )
+    frequency = models.CharField('Frequency', max_length=1, null=True, blank=False)
+    status = models.IntegerField('Status', max_length=1, choices=STATUS)
+
+
 class Account(models.Model):
+
     user = models.ForeignKey(User, related_name='accounts', on_delete=models.CASCADE, null=False)
-    account_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                                       help_text="User's Account Number")
     balance = models.DecimalField(max_digits=14, decimal_places=2, default=500000, blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -149,15 +163,16 @@ class Account(models.Model):
 class Transaction(models.Model):
     trans_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                                 help_text="User's Account Number")
-    account_id = models.ForeignKey(Account, related_name='transactions', on_delete=models.SET_NULL, null=True)
+    account = models.ForeignKey(Account, related_name='transactions', on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(max_digits=14, decimal_places=2)
     #trans_class = models.CharField(max_digits=14)
     def generate_reference():
-        return 'REF'.get_random_string(length=5)
+        random_string = get_random_string(length=5)
+        return 'REF'+random_string
     receipt_no = models.CharField(max_length=15, default=generate_reference)
     trans_type = models.CharField(max_length=15, default='test')
     trans_date = models.DateTimeField(auto_now_add=True)
-    response = models.TextField(max_length=100, default='Sucess')
+    response = models.TextField(max_length=100, default='Success')
 
 
 

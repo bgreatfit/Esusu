@@ -1,6 +1,7 @@
 import logging
 import datetime
 from celery.schedules import crontab
+from django.shortcuts import get_object_or_404
 from django.template import Template, Context
 from django.urls import reverse
 from django.core.mail import send_mail
@@ -9,7 +10,7 @@ from django.contrib.auth import get_user_model
 from .views import TransactionViewSet
 from celery import shared_task
 from cowrywise.celery import app
-from .models import User, Account, Transaction, SavingPreference
+from .models import Account, User, Transaction, SavingPreference, SaveMoneyLog
 
 #
 # # from esusu.models import Account, Transaction
@@ -25,27 +26,54 @@ def hello():
 # # #
 @shared_task
 def save_money():
-    now = datetime.datetime.now()
+    day = datetime.datetime.now().day
     # now.year, now.month, now.day, now.hour, now.minute, now.second
-    print(now)
-    print('here')
-    #user_model = get_user_model()
 
-    saving_prefs = SavingPreference.objects.all()
-    if saving_prefs:
-        for saving_pref in saving_prefs:
-            try:
-                if saving_pref.user:
-                    if saving_pref.day_of_month == now.day and saving_pref.time == now.hour \
-                            and saving_pref.status == '1':
-                        account = Account.objects.get(user_id=saving_pref.user.id)
-                        account.amount -= saving_pref.periodic_amount
-                        account.save()
 
-                        Transaction.objects.create(amount=saving_pref.periodic_amount)
-            except saving_pref.DoesNotExist:
-                logging.warning("Tried to send withdraw '%d' from user '%s'" %
-                                saving_pref.periodic_amount, saving_pref.user.email)
+    print('begin now')
+    # user_model = get_user_model()
+    #
+    # users = user_model.objects.all()
+    savingprefs = SavingPreference.objects.all()
+    time = datetime.datetime.now().strftime('%I:%M %p')
+    # print(time)
+    # for savingpref in savingprefs:
+    #     print(savingpref.time.strftime('%I:%M %p') == time)
+    #     print("{0} == {1} {2} == {3}, {4}".
+    #           format(savingpref.day_of_month, day, savingpref.time.strftime('%I:%M %p'), time, savingpref.status))
+
+    if savingprefs:
+        for savingpref in savingprefs:
+            # try:
+            #     log = SaveMoneyLog.objects.get_or_create(frequency=savingpref.day_of_month,
+            #                                              user_id=savingpref.user_id, time=time)
+            print('here')
+            if savingpref.day_of_month == day and savingpref.time.strftime('%I:%M %p') == time \
+                    and savingpref.status == '1':
+                print('start')
+                try:
+                    log = SaveMoneyLog.objects.get(frequency=savingpref.day_of_month,
+                                                   user_id=savingpref.user_id, time=time, status=1)
+                except SaveMoneyLog.DoesNotExist:
+                    log = None
+                if log is None:
+                    print('no log')
+                    user = savingpref.user_id
+                    account = get_object_or_404(Account, user_id=user)
+                    balance = account.balance
+                    periodic_amount = savingpref.periodic_amount
+                    print("bal{0}, period {1}".format(balance, periodic_amount))
+
+                    account.balance = (balance - periodic_amount)
+                    account.save()
+                    transaction = Transaction.objects.create(amount=savingpref.periodic_amount, account=account)
+                    print('transaction')
+                    if transaction:
+                        SaveMoneyLog.objects.create(user_id=user, time=time, status=1,
+                                                    frequency=savingpref.day_of_month)
+                    print('done')
+
+
 
 
 # #

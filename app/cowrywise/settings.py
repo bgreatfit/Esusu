@@ -15,7 +15,10 @@ from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from datetime import timedelta
-
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -80,6 +83,10 @@ WSGI_APPLICATION = 'cowrywise.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+RDS_HOSTNAME = None
+if 'RDS_HOSTNAME' in os.environ:
+    RDS_HOSTNAME = True
+    print('Horray')
 if 'RDS_HOSTNAME' in os.environ:
     DATABASES = {
         'default': {
@@ -129,8 +136,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Africa/Lagos'
+TIME_INPUT_FORMATS = ('%I:%M %p',)
 USE_I18N = True
 
 USE_L10N = True
@@ -159,11 +166,13 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 
 }
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
+
+CELERY_BROKER_URL = 'redis://redis.doit4m.ng.0001.use2.cache.amazonaws.com:6379' if 'RDS_DB_NAME' in os.environ else 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis.doit4m.ng.0001.use2.cache.amazonaws.com:6379' if 'RDS_DB_NAME' in os.environ else 'redis://redis:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = "Africa/Lagos"
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_BEAT_SCHEDULE = {
     'hello': {
@@ -171,13 +180,15 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 10,  # execute every minute
         #'schedule': crontab()  # execute every minute
     },
-    'task-saving-money': {
-        'task': 'esusu.tasks.save_money',
-        'schedule': 10,
-    },
     # 'task-number-two': {
     #     'task': 'app2.tasks.task_number_two',
     #     'schedule': crontab(minute=0, hour='*/3,10-19'),
     #     'args': (*args)
     # }
 }
+
+
+sentry_sdk.init(
+    dsn="https://a8cc25000f654f7d96f63b5d16eacb19@sentry.io/1578830",
+    integrations=[DjangoIntegration(), CeleryIntegration(), RedisIntegration()]
+)
