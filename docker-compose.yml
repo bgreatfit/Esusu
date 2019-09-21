@@ -22,12 +22,12 @@ services:
       restart: always
       build: .
       container_name: ${PROJECT_NAME}-django
-      command: .entrypoint.sh
+      command: .entrypoint_dev.sh
       env_file:
        - .env
       volumes:
         - ./app:/app
-        - static:/srv
+        - static_volume:/app/staticfiles
       expose:
          - 8000
       depends_on:
@@ -42,7 +42,7 @@ services:
       volumes:
         - mysql-data:/var/lib/mysql
       ports:
-        - "8307:3306"
+        - "8308:3306"
 
 
     phpmyadmin:
@@ -53,7 +53,7 @@ services:
           -  COMPOSE_HTTP_TIMEOUT=180
       restart: always
       ports:
-             - 8083:80
+             - 8084:80
       volumes:
              - /session
 
@@ -62,19 +62,20 @@ services:
       build: ./nginx
       container_name: ${PROJECT_NAME}-nginx
       volumes:
-           - static:/srv:ro
+           - static_volume:/app/staticfiles
       ports:
-           - 8000:8000
+           - 8001:8001
       depends_on:
           - django
     redis:
       image: redis:latest
       container_name: ${PROJECT_NAME}-redis
       ports:
-        - 6379:6379
+        - 6378:6378
 
 
 volumes:
   mysql-data:
   static:
+  static_volume:
 

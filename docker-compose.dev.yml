@@ -1,0 +1,72 @@
+###############################################################################
+#  In settings.py:
+#       DATABASES = {
+#            'default': {
+#                'ENGINE': 'django.db.backends.mysql',
+#                'HOST': 'mysql',
+#                {   ...
+#            }
+#        }
+#
+#  In PyCharm configurations:
+#       Host: 0.0.0.0 - Port: 8000
+#       Python interpreter: Select the docker ...
+###############################################################################
+version: "3.1"
+
+
+
+services:
+
+    django:
+      restart: always
+      build:
+        context: .
+        dockerfile: Dockerfile.dev
+      container_name: ${PROJECT_NAME}-django
+      command: .entrypoint.dev.sh
+      env_file:
+       - .env
+      volumes:
+        - ./app:/app
+        - static_volume:/app/staticfiles
+      ports:
+        - 8001:8001
+      depends_on:
+        - mysql
+        - redis
+
+    mysql:
+      image: mysql:5.6
+      container_name: ${PROJECT_NAME}-mysql
+      environment:
+       - MYSQL_ROOT_PASSWORD=root
+      volumes:
+        - mysql-data:/var/lib/mysql
+      ports:
+        - "8308:3306"
+
+
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: ${PROJECT_NAME}-phpmyadmin
+      environment:
+          - PMA_HOST=cowrywise-mysql
+          -  COMPOSE_HTTP_TIMEOUT=180
+      restart: always
+      ports:
+             - 8084:80
+      volumes:
+             - /session
+    redis:
+      image: redis:latest
+      container_name: ${PROJECT_NAME}-redis
+      ports:
+        - 6378:6378
+
+
+volumes:
+  mysql-data:
+  static:
+  static_volume:
+

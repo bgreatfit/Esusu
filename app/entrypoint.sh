@@ -7,7 +7,7 @@ echo "Collect static files"
 ##
 python manage.py migrate
 #
-python manage.py collectstatic
+python manage.py collectstatic --no-input --clear
 #$ celery worker -A cowrywise --loglevel=debug --concurrency=4
 #celery -A cowrywise worker
 #celery -A cowrywise beat
@@ -16,5 +16,5 @@ echo "Starting server"
 #
 #python manage.py flush --no-input
 #python manage.py collectstatic --no-input
-gunicorn --timeout=30 --workers=2 --bind 0.0.0.0:8000 cowrywise.wsgi:application --reload
+gunicorn --timeout=30 --workers=2 --bind 0.0.0.0:8001 cowrywise.wsgi:application --reload
 #exec "$@"

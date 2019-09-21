@@ -10,11 +10,16 @@ WORKDIR /app
 RUN apt-get update \
     && apt-get -y install libmysqlclient-dev \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+RUN  curl -sL https://deb.nodesource.com/setup_12.x |  bash
+RUN apt-get install -y nodejs
+
 
 # install dependencies
 COPY /app/requirements.txt /app/
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+COPY /app/package.json /app/
+RUN npm install
 
 #RUN pip install --upgrade pip
 #RUN pip install pipenv
@@ -27,7 +32,7 @@ RUN pip install -r requirements.txt
 
 # copy entrypoint.sh
 
-EXPOSE 8000
+EXPOSE 8001
 # copy project
 COPY /app/ /app/
 # run entrypoint.sh

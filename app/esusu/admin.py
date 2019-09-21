@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Member, Group, Account, Transaction, SavingPreference
+from .models import User, Member, Group, Account, Transaction, SavePreference
 
 
 # Register your models here.
@@ -47,4 +47,4 @@ class MemberAdmin(admin.ModelAdmin):
 
 admin.site.register(Account)
 admin.site.register(Transaction)
-admin.site.register(SavingPreference)
+admin.site.register(SavePreference)

@@ -34,7 +34,6 @@ class User(AbstractUser):
         return f'{self.email}'
 
 
-
 def user_post_save(sender, instance, created, *args, **kwargs):
     if created:
         Account.objects.create(user=instance)
@@ -117,7 +116,7 @@ class Member(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class SavingPreference(models.Model):
+class SavePreference(models.Model):
     user = models.OneToOneField(User, related_name='savingspref', on_delete=models.CASCADE, null=False)
     periodic_amount = models.DecimalField(max_digits=14, decimal_places=2, default=500000, blank=False, null=False)
     FREQUENCY = (
@@ -128,13 +127,16 @@ class SavingPreference(models.Model):
     frequency = models.CharField('Frequency', max_length=1, choices=FREQUENCY)
     STATUS = (
         ('1', 'Active'),
-        ('0', 'Paused')
+        ('0', 'Pause')
     )
     status = models.CharField('Status', max_length= 1, choices=STATUS)
     day_of_month = models.IntegerField('Day', blank=False, null=True)
     time = models.TimeField('Time')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class SaveMoneyLog(models.Model):
@@ -148,6 +150,11 @@ class SaveMoneyLog(models.Model):
     status = models.IntegerField('Status', max_length=1, choices=STATUS)
 
 
+class AccountManager(models.Manager):
+    def count_account_type(self, account_type):
+        return self.filter(name__icontains=account_type).count()
+
+
 class Account(models.Model):
 
     user = models.ForeignKey(User, related_name='accounts', on_delete=models.CASCADE, null=False)
@@ -156,6 +163,11 @@ class Account(models.Model):
     balance = models.DecimalField(max_digits=14, decimal_places=2, default=500000, blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    objects = AccountManager()
+
+    def __str__(self):
+        return self.user.username
 
 
 class Transaction(models.Model):
