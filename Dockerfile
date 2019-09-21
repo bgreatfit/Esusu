@@ -32,11 +32,11 @@ RUN npm install
 
 # copy entrypoint.sh
 
-EXPOSE 8001
+EXPOSE 8000
 # copy project
 COPY /app/ /app/
 # run entrypoint.sh
-COPY app/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+COPY app/entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+ENTRYPOINT ["/app/entrypoint.sh"]
 #CMD ["sh","/entrypoint.sh"]
