@@ -1,4 +1,4 @@
-Docker environment for a Esusu project, Django restframework with JWT 
+Docker environment for  Esusu project, Django restframework with JWT 
 ===========================================
 # API Documentation:
   https://documenter.getpostman.com/view/1607163/SVfJVXUq
