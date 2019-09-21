@@ -27,7 +27,7 @@ services:
        - .env
       volumes:
         - ./app:/app
-        - static_volume:/app/staticfiles
+        - static:/srv
       expose:
          - 8000
       depends_on:
@@ -62,7 +62,7 @@ services:
       build: ./nginx
       container_name: ${PROJECT_NAME}-nginx
       volumes:
-           - static_volume:/app/staticfiles
+          - static:/srv:ro
       ports:
            - 8001:8001
       depends_on:
@@ -77,5 +77,4 @@ services:
 volumes:
   mysql-data:
   static:
-  static_volume:
 

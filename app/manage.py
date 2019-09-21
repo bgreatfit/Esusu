@@ -5,7 +5,8 @@ import sys
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cowrywise.settings')
+    settings = "cowrywise.settings" if 'RDS_DB_NAME' in os.environ else 'cowrywise.settings_dev'
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings)
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

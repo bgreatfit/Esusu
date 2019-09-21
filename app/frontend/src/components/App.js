@@ -1,9 +1,13 @@
 import React, {Component } from 'react';
 import ReactDOM from 'react-dom';
+import Header from './layouts/Header';
 
 class App extends Component {
   render(){
-      return <h1>My Sir</h1>
+      return(
+          <Header/>
+
+      )
   }
 }
 

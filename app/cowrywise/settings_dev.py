@@ -85,32 +85,16 @@ WSGI_APPLICATION = 'cowrywise.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-RDS_HOSTNAME = None
-if 'RDS_HOSTNAME' in os.environ:
-    RDS_HOSTNAME = True
-    print('Horray')
-if 'RDS_HOSTNAME' in os.environ:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PWD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': '3306'
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv('DB_NAME'),
-            'USER': os.getenv('DB_USER'),
-            'PASSWORD': os.getenv('DB_PWD'),
-            'HOST': os.getenv('DB_HOST'),
-            'PORT': '3306'
-        }
-    }
+}
 
 
 
@@ -149,8 +133,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_URL = '/staticfiles/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_ROOT = "/srv/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
@@ -170,8 +154,8 @@ SIMPLE_JWT = {
 
 }
 
-CELERY_BROKER_URL = "redis://redis.doit4m.ng.0001.use2.cache.amazonaws.com:6379" if 'RDS_DB_NAME' in os.environ else 'redis://redis:6379'
-CELERY_RESULT_BACKEND = "redis://redis.doit4m.ng.0001.use2.cache.amazonaws.com:6379" if 'RDS_DB_NAME' in os.environ else 'redis://redis:6379'
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
