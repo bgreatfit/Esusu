@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development --watch ./frontend/src/index.js --output ./frontend/static/frontend/main.js",
-    "build": "webpack --mode production ./frontend/src/index.js --output ./frontend/static/frontend/main.js"
+    "dev": "webpack --mode development --watch ./frontend/src/index.jsx --output ./frontend/static/frontend/main.js",
+    "build": "webpack --mode production ./frontend/src/index.jsx --output ./frontend/static/frontend/main.js"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,8 @@
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9"
   }

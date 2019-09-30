@@ -40,7 +40,8 @@ def user_post_save(sender, instance, created, *args, **kwargs):
     if created:
         Account.objects.create(user=instance)
     if not instance.is_verified:
-        from .tasks import send_verification_email
+        pass
+        #from .tasks import send_verification_email
         # Send verification email
        # send_verification_email.delay(instance.pk)
 
