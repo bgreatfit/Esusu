@@ -4,19 +4,21 @@ import Header from './layouts/Header.jsx';
 import Clock from './layouts/Clock.jsx';
 import Dashboard from "./leads/Dashboard.jsx";
 import {FilterableProductTable} from "./leads/Product.jsx";
-
+import {Provider} from 'react-redux';
+import store from '../store';
 class App extends Component {
   render(){
       return(
-          <Fragment>
-               <Header/>
-               <Clock/>
-                <div className="container">
-                     <Dashboard/>
-                </div>
-              <FilterableProductTable products={this.props.products}/>
-
-          </Fragment>
+          <Provider store={store}>
+              <Fragment>
+                   <Header/>
+                   <Clock/>
+                    <div className="container">
+                         <Dashboard/>
+                    </div>
+                  <FilterableProductTable products={this.props.products}/>
+              </Fragment>
+          </Provider>
 
 
       )
