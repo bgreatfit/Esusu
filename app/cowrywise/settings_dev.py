@@ -175,7 +175,7 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 
-sentry_sdk.init(
-    dsn="https://a8cc25000f654f7d96f63b5d16eacb19@sentry.io/1578830",
-    integrations=[DjangoIntegration(), CeleryIntegration(), RedisIntegration()]
-)
+# sentry_sdk.init(
+#     dsn="https://a8cc25000f654f7d96f63b5d16eacb19@sentry.io/1578830",
+#     integrations=[DjangoIntegration(), CeleryIntegration(), RedisIntegration()]
+# )

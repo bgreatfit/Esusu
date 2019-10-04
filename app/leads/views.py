@@ -9,5 +9,10 @@ class LeadListCreate(generics.ListCreateAPIView):
     serializer_class = LeadSerializer
 
 
+class LeadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Lead.objects.all()
+    serializer_class = LeadSerializer
+
+
 
 # Create your views here.
